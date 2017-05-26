@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block title %}
+
+Customer-{{customer.name}}
+
+{% endblock %}
+
+{% block content %}
+<div class="container">
+
+  <div class="row">
+    <div class="col-sm-12">
+
+      <h2>{{customer.name}}</h2>
+      <a href="{% url 'customers:update' customer.id %}"><button class="btn btn-primary">Update</button></a>
+      <a href="{% url 'customers:delete' customer.id %}"><button class="btn btn-primary">Delete</button></a> 
+    </div>
+  </div>
+
+
+</div>
+{% endblock content %}

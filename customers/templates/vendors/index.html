@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block title %}
+
+Vendors
+
+{% endblock %}
+
+{% block content %}
+<div class="container">
+
+  <div class="row">
+    <div class="col-sm-12">
+
+      <h2>list of vendors</h2>
+      <br/>
+      <a href="{% url 'customers:addVendor' %}"><button type="button" class="btn btn-primary ">Add Vendor</button></a>
+      <hr/>
+      
+      
+ <table class="table table-striped">
+  <thead>
+    <tr>
+      <th>#</th>
+      <th>Name</th>
+      <th>City</th>
+      <th>Phone Number</th>
+    </tr>
+  </thead>
+  <tbody>
+  {% for v in vendors %}
+    <tr>
+      <th scope="row">{{ forloop.counter }}</th>
+      <td>{{ v.name }}</td>
+      <td>{{ v.city }}</td>
+      <td>{{ v.phone_number }}</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+    </div>
+  </div>
+
+
+</div>
+{% endblock content %}

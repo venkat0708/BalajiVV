@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block title %}
+
+Customers
+
+{% endblock %}
+
+{% block content %}
+<div class="container">
+
+  <div class="row">
+    <div class="col-sm-12">
+
+      <h2>list of customers</h2>
+      <br/>
+      <a href="{% url 'customers:add' %}"><button type="button" class="btn btn-primary">Add Customer</button></a>
+      <hr/>
+      
+ <table class="table table-striped">
+  <thead>
+    <tr>
+      <th>#</th>
+      <th>Name</th>
+      <th>City</th>
+      <th>Phone Number</th>
+    </tr>
+  </thead>
+  <tbody>
+  {% for c in customers %}
+    <tr>
+      <th scope="row">{{ forloop.counter }}</th>
+      <td>{{ c.name }}</td>
+      <td>{{ c.city }}</td>
+      <td>{{ c.phone_number }}</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+    </div>
+  </div>
+
+
+</div>
+{% endblock content %}
