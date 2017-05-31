@@ -26,15 +26,17 @@ Customers
       <th>Name</th>
       <th>City</th>
       <th>Phone Number</th>
+      <th></th>
     </tr>
   </thead>
   <tbody>
   {% for c in customers %}
     <tr>
       <th scope="row">{{ forloop.counter }}</th>
-      <td>{{ c.name }}</td>
+      <td><a href="{% url 'customers:detail' c.id %}">{{ c.name }}</a></td>
       <td>{{ c.city }}</td>
       <td>{{ c.phone_number }}</td>
+      <td><a href="{% url 'customers:delete' c.id %}"><button type="button" class="btn btn-danger">Delete</button></a></td>
     </tr>
     {% endfor %}
   </tbody>

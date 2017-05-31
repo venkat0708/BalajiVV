@@ -15,18 +15,18 @@ urlpatterns = [
     	name='add'
     ),
     url(
-        regex=r'^update/(?P<id>[1-9]+)/$',
+        regex=r'^update/(?P<id>[0-9]+)/$',
         view=views.Update_Customer,
         name='update'
     ),
     url(
-        regex=r'^(?P<id>[1-9]+)/$',
+        regex=r'^detail/(?P<id>[0-9]+)/$',
         view=views.Detail_Customer,
         name='detail'
     ),
     
     url(
-        regex=r'^delete/(?P<id>[1-9]+)/$',
+        regex=r'^delete/(?P<id>[0-9]+)/$',
         view=views.Delete_Customer,
         name='delete'
     ),
@@ -44,19 +44,19 @@ urlpatterns = [
     ),
                
     url(
-        regex=r'^updateVendor/(?P<id>[1-9]+)/$',
+        regex=r'^updateVendor/(?P<id>[0-9]+)/$',
         view=views.Update_Vendor,
         name='updateVendor'
     ),
                
     url(
-        regex=r'^detailVendor/(?P<id>[1-9]+)/$',
+        regex=r'^detailVendor/(?P<id>[0-9]+)/$',
         view=views.Detail_Vendor,
         name='detailVendor'
     ),
                
      url(
-        regex=r'^deleteVendor/(?P<id>[1-9]+)/$',
+        regex=r'^deleteVendor/(?P<id>[0-9]+)/$',
         view=views.Delete_Vendor,
         name='deleteVendor'
     ),

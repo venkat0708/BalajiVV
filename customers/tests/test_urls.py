@@ -36,11 +36,11 @@ class TestCustomersUrls(TestCase):
         
     def test_customers_detail_reverse(self):
         """customer:detail should reverse to /customers/1"""
-        self.assertEqual(reverse('customers:detail', kwargs={'id' : 1}), '/customers/1/')
+        self.assertEqual(reverse('customers:detail', kwargs={'id' : 1}), '/customers/detail/1/')
         
     def test_customers_detail_resolve(self):
         """/customers/1 should resolve to customer:detail """
-        self.assertEqual(resolve('/customers/1/').view_name, 'customers:detail')
+        self.assertEqual(resolve('/customers/detail/1/').view_name, 'customers:detail')
         
     def test_customers_delete_reverse(self):
         """customer:delete should reverse to /customers/delete/"""

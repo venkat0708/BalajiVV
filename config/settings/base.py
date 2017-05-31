@@ -55,7 +55,9 @@ THIRD_PARTY_APPS = [
 LOCAL_APPS = [
     # custom users app
     'Balaji.users.apps.UsersConfig',
-    'customers.apps.CustomersConfig'
+    'core.apps.CoreConfig',
+    'customers.apps.CustomersConfig',
+    'products.apps.ProductsConfig',
     # Your stuff: custom apps go here
 ]
 

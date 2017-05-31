@@ -1,5 +1,6 @@
 from test_plus.test import TestCase
 
+
 from ..models import (Customer, Vendor)
 from __builtin__ import isinstance
 
@@ -26,8 +27,9 @@ class CustomerTest(TestCase):
     def test_customers_data(self):
         customer = Customer.objects.get(name = 'testcustomer')
         assert customer.name == 'testcustomer'
+        assert customer.__str__() == 'testcustomer'
         
-        
+    
 class VendorTest(TestCase):
     def setUp(self):
         self.name = "testVendor"
@@ -51,3 +53,6 @@ class VendorTest(TestCase):
     def test_vendors_data(self):
         vendor = Vendor.objects.get(name = 'testVendor')
         assert vendor.name == 'testVendor'
+        assert vendor.__str__ ()== 'testVendor'
+        
+        
