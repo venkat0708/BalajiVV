@@ -2,6 +2,7 @@ from __future__ import unicode_literals
 
 from django.db import models
 from django.core.validators import RegexValidator, MinValueValidator,MaxValueValidator
+from django.core.urlresolvers import reverse
 
 from core.models import BaseEntity
 
@@ -12,7 +13,7 @@ class Category(BaseEntity):
         max_length=80,
         validators=[
             RegexValidator(
-                regex='^[a-zA-Z]*$',
+                regex='^[a-zA-Z\s]*$',
                  message='name should contain only alphabets',
                 code='invalid_name'
             ),
@@ -22,7 +23,7 @@ class Category(BaseEntity):
         max_length=250,
         validators=[
             RegexValidator(
-                regex='^[a-zA-Z]*$',
+                regex='^[a-zA-Z\s]*$',
                  message='name should contain only alphabets',
                 code='invalid_name'
             ),
@@ -31,14 +32,22 @@ class Category(BaseEntity):
     
     def __str__(self):
         return self.name
-
+    
+    def get_absolute_url(self):
+        return reverse('products:Category_Detail', kwargs={'pk': self.id})
+    
+    def get_update_url(self):
+        return reverse('products:Category_Update', kwargs={'pk': self.id})
+    
+    def get_delete_url(self):
+        return reverse('products:Category_Delete', kwargs={'pk': self.id})
 
 class Product(BaseEntity):
     name = models.CharField(
         max_length=80,
         validators=[
             RegexValidator(
-                regex='^[a-zA-Z]*$',
+                regex='^[a-zA-Z\s]*$',
                  message='name should contain only alphabets',
                 code='invalid_name'
             ),
@@ -50,7 +59,7 @@ class Product(BaseEntity):
         null = True,
         validators=[
             RegexValidator(
-                regex='^[a-zA-Z]*$',
+                regex='^[a-zA-Z\s]*$',
                  message='name should contain only alphabets',
                 code='invalid_name'
             ),
@@ -82,14 +91,15 @@ class Product(BaseEntity):
     
     def __str__(self):
         return self.name
-
+    
+    
 
 class Service(BaseEntity):
     name = models.CharField(
         max_length=80,
         validators=[
             RegexValidator(
-                regex='^[a-zA-Z]*$',
+                regex='^[a-zA-Z\s]*$',
                  message='name should contain only alphabets',
                 code='invalid_name'
             ),
@@ -101,7 +111,7 @@ class Service(BaseEntity):
         null = True,
         validators=[
             RegexValidator(
-                regex='^[a-zA-Z]*$',
+                regex='^[a-zA-Z\s]*$',
                  message='name should contain only alphabets',
                 code='invalid_name'
             ),

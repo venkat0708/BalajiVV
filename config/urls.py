@@ -17,7 +17,8 @@ urlpatterns = [
     url(r'^accounts/', include('allauth.urls')),
 
     # Your stuff: custom urls includes go here
-    url(r'customers/', include('customers.urls', namespace='customers')),
+    url(r'^customers/', include('customers.urls', namespace='customers')),
+    url(r'^products/', include('products.urls', namespace='products')),
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 

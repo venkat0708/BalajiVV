@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block title %}
+
+Categories
+
+{% endblock %}
+
+{% block content %}
+<div class="container">
+
+  <div class="row">
+    <div class="col-sm-12">
+
+      <h2>list of Categories</h2>
+      <br/>
+      <a href="{% url 'products:Category_Create' %}"><button type="button" class="btn btn-primary"><i class="fa fa-plus-square fa-2x" aria-hidden="true"></i> &nbsp;Add Category</button></a>
+      <hr/>
+      
+ {% if category_list %}    
+ <table class="table table-striped">
+  <thead>
+    <tr>
+      <th>#</th>
+      <th>Name</th>
+      <th>Description</th>
+      <th></th>
+      
+    </tr>
+  </thead>
+  <tbody>
+  {% for c in category_list %}
+    <tr>
+      <th scope="row">{{ forloop.counter }}</th>
+      <td><a href="{{ c.get_absolute_url }}">{{ c.name }}</a></td>
+      <td>{{ c.description }}</td>
+      <td><a href="{{ c.get_update_url }}"><button type="button" class="btn btn-primary"><i class="fa fa-pencil-square-o fa-2x" aria-hidden="true"></i></button></a>&nbsp;&nbsp;
+      <a href="{{ c.get_delete_url }}"><button type="button" class="btn btn-danger"><i class="fa fa-trash fa-2x" aria-hidden="true"></i></button></a></td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+{% else %}
+<h3>No Categories yet, Would you like to add one </h3>
+{% endif %}
+    </div>
+  </div>
+
+
+</div>
+{% endblock content %}
