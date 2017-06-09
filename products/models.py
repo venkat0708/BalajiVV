@@ -85,6 +85,19 @@ class Product(BaseEntity):
             ),
         ]
     )
+    quantity = models.IntegerField(
+        validators=[
+            MinValueValidator(
+                0,
+                message = 'Quantity should be greater than 0'
+            ),
+            
+            MaxValueValidator(
+                100000,
+                message = 'Quantity should be less than 100000'
+            ),
+        ]
+    )
     
     is_active = models.BooleanField(default =True)
     
