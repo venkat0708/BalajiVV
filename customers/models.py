@@ -32,7 +32,7 @@ class Customer(BaseEntity):
 		max_length=80,
 		validators=[
 			RegexValidator(
-            	regex='^[a-zA-Z]*$',
+            	regex='^[a-zA-Z\s]*$',
              	message='city should contain only alphabets',
 				code='invalid_city'
 			),
@@ -68,7 +68,7 @@ class Vendor(BaseEntity):
 		max_length=80,
 		validators=[
 			RegexValidator(
-            	regex='^[a-zA-Z]*$',
+            	regex='^[a-zA-Z\s]*$',
              	message='name should contain only alphabets',
 				code='invalid_name'
 			),
@@ -79,7 +79,7 @@ class Vendor(BaseEntity):
 		max_length=80,
 		validators=[
 			RegexValidator(
-            	regex='^[a-zA-Z]*$',
+            	regex='^[a-zA-Z\s]*$',
              	message='city should contain only alphabets',
 				code='invalid_city'
 			),
