@@ -4,7 +4,7 @@ from django.views import generic
 from django.contrib.auth.mixins import UserPassesTestMixin,LoginRequiredMixin
 
 
-from .models import Category
+from .models import Category,Product
 
 # Create your views here.
 
@@ -58,6 +58,63 @@ class CategoryDeleteView(LoginRequiredMixin,UserPassesTestMixin,generic.edit.Del
     model = Category
     template_name = 'categories/category_delete.html'
     success_url = reverse_lazy('products:Category_Index')
+    login_url = '/'
+    
+    def test_func(self):
+        return  'product management' in [i.name for i in self.request.user.groups.all()]
+    
+    
+class ProductIndexView(LoginRequiredMixin,UserPassesTestMixin,generic.ListView):
+    model = Product
+    template_name = 'products/products_list.html'
+    context_object_name = 'products_list'
+    login_url = '/'
+    
+    def test_func(self):
+        return  'product management' in [i.name for i in self.request.user.groups.all()]
+    
+    
+    
+class ProductDetailView(LoginRequiredMixin,UserPassesTestMixin,generic.DetailView):
+    model = Product
+    template_name = 'products/product_detail.html'
+    context_object_name = 'product'
+    login_url = '/'
+    
+    def test_func(self):
+        return  'product management' in [i.name for i in self.request.user.groups.all()]
+    
+    
+class ProductCreateView(LoginRequiredMixin, UserPassesTestMixin,generic.edit.CreateView):
+    model = Product
+    fields = ['name','description','price','quantity','category']
+    template_name = 'products/product_add.html'
+    login_url = '/'
+    
+    def test_func(self):
+        return  'product management' in [i.name for i in self.request.user.groups.all()]
+    
+    def get_success_url(self):
+        return reverse('products:Product_Index')
+    
+    def test_func(self):
+        print self.request.user.groups.all()
+        return  'product management' in [i.name for i in self.request.user.groups.all()]
+    
+    
+class ProductUpdateView(LoginRequiredMixin,UserPassesTestMixin,generic.edit.UpdateView):
+    model = Product
+    fields = ['name','description','price','quantity','category']
+    template_name = 'products/product_update.html'
+    login_url = '/'
+    
+    def test_func(self):
+        return  'product management' in [i.name for i in self.request.user.groups.all()]
+    
+class ProductDeleteView(LoginRequiredMixin,UserPassesTestMixin,generic.edit.DeleteView):
+    model = Product
+    template_name = 'products/product_delete.html'
+    success_url = reverse_lazy('products:Product_Index')
     login_url = '/'
     
     def test_func(self):

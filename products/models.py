@@ -47,7 +47,7 @@ class Product(BaseEntity):
         max_length=80,
         validators=[
             RegexValidator(
-                regex='^[a-zA-Z\s]*$',
+                regex='^[0-9a-zA-Z\s]*$',
                  message='name should contain only alphabets',
                 code='invalid_name'
             ),
@@ -105,7 +105,14 @@ class Product(BaseEntity):
     def __str__(self):
         return self.name
     
+    def get_absolute_url(self):
+        return reverse('products:Product_Detail', kwargs={'pk': self.id})
     
+    def get_update_url(self):
+        return reverse('products:Product_Update', kwargs={'pk': self.id})
+    
+    def get_delete_url(self):
+        return reverse('products:Product_Delete', kwargs={'pk': self.id})
 
 class Service(BaseEntity):
     name = models.CharField(

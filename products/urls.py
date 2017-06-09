@@ -33,5 +33,35 @@ urlpatterns = [
       view = CategoryDeleteView.as_view(),
       name = 'Category_Delete'  
     ),
+    
+    url(
+        regex=r'^products/$',
+        view=ProductIndexView.as_view(),
+        name='Product_Index'
+    ),
                
+    url(
+      regex=r'^product/(?P<pk>[\d]+)/$',
+      view = ProductDetailView.as_view(),
+      name = 'Product_Detail'  
+    ),
+               
+    url(
+      regex=r'^product/add/$',
+      view = ProductCreateView.as_view(),
+      name = 'Product_Create'  
+    ),
+               
+    url(
+      regex=r'^product/update/(?P<pk>[\d]+)/$',
+      view = ProductUpdateView.as_view(),
+      name = 'Product_Update'  
+    ),
+               
+    url(
+      regex=r'^product/delete/(?P<pk>[\d]+)/$',
+      view = ProductDeleteView.as_view(),
+      name = 'Product_Delete'  
+    ),
+                  
 ]

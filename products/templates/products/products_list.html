@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block title %}
+
+Products
+
+{% endblock %}
+
+{% block content %}
+<div class="container">
+
+  <div class="row">
+    <div class="col-sm-12">
+
+      <h2>list of Products</h2>
+      <br/>
+      <a href="{% url 'products:Product_Create' %}"><button type="button" class="btn btn-primary">Add Product</button></a>
+      <hr/>
+      
+ {% if products_list %}    
+ <table class="table table-striped">
+  <thead>
+    <tr>
+      <th>#</th>
+      <th>Name</th>
+      <th>Description</th>
+      <th>Price</th>
+      <th>Category</th>
+      <th>Quantity</th>
+      <th></th>
+      
+    </tr>
+  </thead>
+  <tbody>
+  {% for p in products_list %}
+    <tr>
+      <th scope="row">{{ forloop.counter }}</th>
+      <td><a href="{{ c.get_absolute_url }}">{{ p.name }}</a></td>
+      <td>{{ p.description }}</td>
+      <td>{{ p.price }}</td>
+      <td>{{ p.quantity }}</td>
+      <td>{{ p.category }}</td>
+      <td><a href="{{ p.get_update_url }}"><button type="button" class="btn btn-primary"><i class="fa fa-pencil-square-o fa-2x" aria-hidden="true"></i></button></a>&nbsp;&nbsp;
+      <a href="{{ p.get_delete_url }}"><button type="button" class="btn btn-danger"><i class="fa fa-trash fa-2x" aria-hidden="true"></i></button></a></td>
+    </tr> 
+    {% endfor %}
+  </tbody>
+</table>
+
+{% else %}
+<h3>No Products yet, Would you like to add one </h3>
+{% endif %}
+    </div>
+  </div>
+
+
+</div>
+{% endblock content %}
