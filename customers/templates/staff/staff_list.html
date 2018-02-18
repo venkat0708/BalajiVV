@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block title %}
+
+Staff
+
+{% endblock %}
+
+{% block content %}
+<div class="container">
+
+  <div class="row">
+    <div class="col-sm-12">
+
+      <h2>list of Staff</h2>
+      <br/>
+      <a href="{% url 'customers:Staff_Create' %}"><button type="button" class="btn btn-primary">Add Staff</button></a>
+      <hr/>
+
+ {% if staff_list %}
+ <table class="table table-striped">
+  <thead>
+    <tr>
+      <th>#</th>
+      <th>Name</th>
+      <th>City</th>
+      <th>Phone Number</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+  {% for s in staff_list %}
+    <tr>
+      <th scope="row">{{ forloop.counter }}</th>
+      <td><a href="{{ s.get_absolute_url }}">{{ s.name }}</a></td>
+      <td>{{ s.city }}</td>
+      <td>{{ s.phone_number }}</td>
+      <td><a href="{{s.get_update_url }}"><button type="button" class="btn btn-primary"><i class="fa fa-pencil-square-o fa-2x" aria-hidden="true"></i></button></a>&nbsp;&nbsp;
+      <a href="{{ s.get_delete_url }}"><button type="button" class="btn btn-danger"><i class="fa fa-trash fa-2x" aria-hidden="true"></i></button></a></td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+{% else %}
+<h3>No Staff yet, Would you like to add one </h3>
+{% endif %}
+    </div>
+  </div>
+
+
+</div>
+{% endblock content %}
