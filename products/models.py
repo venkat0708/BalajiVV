@@ -29,16 +29,16 @@ class Category(BaseEntity):
             ),
         ]
     )
-    
+
     def __str__(self):
         return self.name
-    
+
     def get_absolute_url(self):
         return reverse('products:Category_Detail', kwargs={'pk': self.id})
-    
+
     def get_update_url(self):
         return reverse('products:Category_Update', kwargs={'pk': self.id})
-    
+
     def get_delete_url(self):
         return reverse('products:Category_Delete', kwargs={'pk': self.id})
 
@@ -78,7 +78,7 @@ class Product(BaseEntity):
                 10,
                 message = 'Price should be greater than 10'
             ),
-            
+
             MaxValueValidator(
                 100000,
                 message = 'Price should be less than 100000'
@@ -91,26 +91,26 @@ class Product(BaseEntity):
                 0,
                 message = 'Quantity should be greater than 0'
             ),
-            
+
             MaxValueValidator(
                 100000,
                 message = 'Quantity should be less than 100000'
             ),
         ]
     )
-    
+
     is_active = models.BooleanField(default =True)
-    
-    
+
+
     def __str__(self):
         return self.name
-    
+
     def get_absolute_url(self):
         return reverse('products:Product_Detail', kwargs={'pk': self.id})
-    
+
     def get_update_url(self):
         return reverse('products:Product_Update', kwargs={'pk': self.id})
-    
+
     def get_delete_url(self):
         return reverse('products:Product_Delete', kwargs={'pk': self.id})
 
@@ -150,18 +150,39 @@ class Service(BaseEntity):
                 10,
                 message = 'Price should be greater than 10'
             ),
-            
+
             MaxValueValidator(
                 100000,
                 message = 'Price should be less than 100000'
             ),
         ]
     )
-    
+
+    quantity = models.IntegerField(
+        validators=[
+            MinValueValidator(
+                0,
+                message = 'Quantity should be greater than 0'
+            ),
+
+            MaxValueValidator(
+                100000,
+                message = 'Quantity should be less than 100000'
+            ),
+        ]
+    )
+
     is_active = models.BooleanField(default =True)
-    
-    
+
+
     def __str__(self):
         return self.name
 
+    def get_absolute_url(self):
+        return reverse('products:Service_Detail', kwargs={'pk': self.id})
 
+    def get_update_url(self):
+        return reverse('products:Service_Update', kwargs={'pk': self.id})
+
+    def get_delete_url(self):
+        return reverse('products:Service_Delete', kwargs={'pk': self.id})
