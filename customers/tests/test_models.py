@@ -1,7 +1,7 @@
 from test_plus.test import TestCase
 
 
-from Balaji.customers.models import (Customer, Vendor)
+from ..models import (Customer, Vendor)
 from builtins import isinstance
 
 class CustomerTest(TestCase):
