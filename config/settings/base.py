@@ -58,6 +58,7 @@ LOCAL_APPS = [
     'core.apps.CoreConfig',
     'customers.apps.CustomersConfig',
     'products.apps.ProductsConfig',
+    'booking.apps.BookingConfig',
     # Your stuff: custom apps go here
 ]
 

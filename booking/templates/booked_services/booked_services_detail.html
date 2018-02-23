@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block title %}
+
+Booked Service-{{ booked_service.event }}
+
+{% endblock %}
+
+{% block content %}
+<div class="container">
+
+  <div class="row">
+    <div class="col-sm-12">
+
+      <h2>{{ booked_service.event }}</h2>
+      <a href="{% url 'booking:Booked_Service_Update' booked_service.id %}"><button class="btn btn-primary">Update</button></a>
+      <a href="{% url 'booking:Booked_Service_Delete' booked_service.id %}"><button class="btn btn-primary">Delete</button></a>
+    </div>
+  </div>
+
+
+</div>
+{% endblock content %}

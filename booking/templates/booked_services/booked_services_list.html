@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block title %}
+
+Services
+
+{% endblock %}
+
+{% block content %}
+<div class="container">
+
+  <div class="row">
+    <div class="col-sm-12">
+
+      <h2>list of Services served</h2>
+      <br/>
+      <a href="{% url 'booking:Booked_Service_Add' %}"><button type="button" class="btn btn-primary">Add Booking Service</button></a>
+      <hr/>
+{% if booked_services %}
+ <table class="table table-striped">
+  <thead>
+    <tr>
+      <th>#</th>
+      <th>Event</th>
+      <th>Service</th>
+      <th>start_date</th>
+      <th>start_time</th>
+      <th>end_date</th>
+      <th>end_time</th>
+      <th>Quantity</th>
+      <th>Price</th>
+      <th>Vendor</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+  {% for c in booked_services %}
+    <tr>
+      <th scope="row">{{ forloop.counter }}</th>
+      <td><a href="{% url 'booking:Booked_Service_Detail' c.id %}">{{ c.event }}</a></td>
+      <td>{{ c.service }}</td>
+      <td>{{ c.start_date }}</td>
+      <td>{{ c.start_time }}</td>
+      <td>{{ c.end_date }}</td>
+      <td>{{ c.end_time }}</td>
+      <td>{{ c.quantity }}</td>
+      <td>{{ c.price }}</td>
+      <td>{{ c.vendor }}</td>
+      <td><a href="{% url 'booking:Booked_Service_Delete' c.id %}"><button type="button" class="btn btn-danger">Delete</button></a></td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% else %}
+<h3>No Booked Services yet, Would you like to add one </h3>
+{% endif %}
+    </div>
+  </div>
+
+
+</div>
+{% endblock content %}
