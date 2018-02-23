@@ -6,7 +6,7 @@ from django.core.validators import RegexValidator, MinValueValidator,MaxValueVal
 from core.models import BaseEntity
 from products.models import Service
 from customers.models import Staff, Customer, Vendor
-from booking.models import Event, Booked_Service
+
 
 class Commission_Structure(BaseEntity):
     """ commission for staff based on services"""
@@ -148,7 +148,7 @@ class Invoice(BaseEntity):
             related_name='invoices',
         )
     event = models.ForeignKey(
-            Event,
+            'booking.Event',
             related_name='invoice',
         )
     generated_date = models.DateField(
@@ -220,7 +220,7 @@ class Bill(BaseEntity):
             related_name='vendor',
         )
     booked_service = models.ForeignKey(
-            Booked_Service,
+            'booking.Booked_Service',
             related_name='billed_services',
         )
     generated_date = models.DateField(
@@ -292,7 +292,7 @@ class Commission(BaseEntity):
             related_name='staff_commissions',
         )
     booked_service = models.ForeignKey(
-            Booked_Service,
+            'booking.Booked_Service',
             related_name='commissions',
         )
     generated_date = models.DateField(

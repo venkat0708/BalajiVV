@@ -4,10 +4,14 @@ from django.db import models
 from django.core.validators import RegexValidator
 from django.core.urlresolvers import reverse
 from django.core.validators import RegexValidator, MinValueValidator,MaxValueValidator
+from django.dispatch import receiver
+from django.db.models.signals import post_save
+from django.utils import timezone
 
 from core.models import BaseEntity
 from customers.models import Customer,Vendor, Staff
 from products.models import Service
+from accounting.models import Invoice, Bill, Commission
 
 class Event(BaseEntity):
 
@@ -167,3 +171,88 @@ class Booked_Service(BaseEntity):
 
     def get_delete_url(self):
         return reverse('booking:Booked_Service_Delete', kwargs={'pk': self.id})
+
+
+#signals
+
+@receiver(post_save, sender=Event)
+def generate_or_modify_invoice_and_bills_based_on_event_state(sender, **kwargs):
+    event = kwargs.get('instance')
+    booked_services = event.services_booked.all()
+    if event.status == 'COMPLETED':
+        amount = 0
+        for b in booked_services:
+            amount += b.quantity * b.price
+        try:
+            invoice = Invoice.objects.get(event = event.id)
+            invoice.event = event
+            invoice.customer = event.customer
+            invoice.amount = amount
+            invoice.generated_date = timezone.now().date()
+            invoice.due_date = timezone.now().date()
+        except:
+            invoice = Invoice(
+                    event = event,
+                    customer = event.customer,
+                    amount= amount,
+                    generated_date = timezone.now().date(),
+                    paid = 0,
+                    due_date = timezone.now().date(),
+
+                )
+            invoice.save()
+        for b in booked_services:
+            for s in b.staff.all():
+                try:
+                    commission = Commission.objects.get(staff = s.id)
+                    commission.booked_service = b
+                    commission.generated_date = timezone.now().date()
+                    commission.due_date = timezone.now().date()
+                    commission.amount = 500
+                    commission.save()
+                except:
+                    commission = Commission(
+                            staff = s,
+                            booked_service = b,
+                            amount = 500,
+                            generated_date = timezone.now().date(),
+                            paid = 0,
+                            due_date = timezone.now().date(),
+                        )
+                    commission.save()
+            try:
+                bill = Bill.objects.get(booked_service = b.id)
+                bill.vendor = b.vendor
+                bill.generated_date = timezone.now().date()
+                bill.due_date = timezone.now().date()
+                bill.amount = b.price * b.quantity
+                bill.save()
+            except:
+                if b.vendor:
+                    bill = Bill(
+                            booked_service = b,
+                            vendor = b.vendor,
+                            generated_date = timezone.now().date(),
+                            paid = 0,
+                            due_date = timezone.now().date(),
+                            amount = b.price * b.quantity,
+                        )
+                    bill.save()
+    else:
+        try:
+            invoice = Invoice.objects.get(event = event.id)
+            invoice.delete()
+        except:
+            pass
+        for b in booked_services:
+            for s in b.staff.all():
+                try:
+                    commission = Commission.objects.get(staff = s.id)
+                    commission.delete()
+                except:
+                    pass
+            try:
+                bill = Bill.objects.get(booked_service = b.id)
+                bill.delete()
+            except:
+                pass
