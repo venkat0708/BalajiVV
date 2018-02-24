@@ -33,7 +33,7 @@ class EventDetailView(LoginRequiredMixin,UserPassesTestMixin,generic.DetailView)
 
 class EventCreateView(LoginRequiredMixin, UserPassesTestMixin,generic.edit.CreateView):
     model = Event
-    fields = ['customer','venue', 'city','start_date', 'start_time','end_date','end_time','status']
+    fields = ['customer','venue', 'city','start_date', 'start_time','end_date','end_time','advance','status']
     template_name = 'booking/event_add.html'
     login_url = '/'
 
@@ -50,7 +50,7 @@ class EventCreateView(LoginRequiredMixin, UserPassesTestMixin,generic.edit.Creat
 
 class EventUpdateView(LoginRequiredMixin,UserPassesTestMixin,generic.edit.UpdateView):
     model = Event
-    fields = ['customer','venue', 'city','start_date', 'start_time','end_date','end_time','status']
+    fields = ['customer','venue', 'city','start_date', 'start_time','end_date','end_time','advance','status']
     template_name = 'booking/event_update.html'
     login_url = '/'
 

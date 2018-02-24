@@ -11,7 +11,7 @@ from django.utils import timezone
 from core.models import BaseEntity
 from customers.models import Customer,Vendor, Staff
 from products.models import Service
-from accounting.models import Invoice, Bill, Commission
+from accounting.models import Invoice, Bill, Commission, Payin
 
 class Event(BaseEntity):
 
@@ -76,6 +76,23 @@ class Event(BaseEntity):
         max_length =15,
         choices = STATUS_CHOICES,
         default = 'ENQUIRY',
+    )
+
+    advance = models.IntegerField(
+            default=0,
+            blank=True,
+            null=True,
+            validators=[
+            MinValueValidator(
+                10,
+                message = 'Advance should be greater than 10'
+            ),
+
+            MaxValueValidator(
+                10000000,
+                message = 'Advance should be less than 10000000'
+            ),
+        ]
     )
 
     def __str__(self):
@@ -196,7 +213,7 @@ def generate_or_modify_invoice_and_bills_based_on_event_state(sender, **kwargs):
                     customer = event.customer,
                     amount= amount,
                     generated_date = timezone.now().date(),
-                    paid = 0,
+                    paid = event.advance,
                     due_date = timezone.now().date(),
 
                 )

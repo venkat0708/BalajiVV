@@ -53,6 +53,12 @@ class Payin(BaseEntity):
         ('DD', 'Demand Draft'),
         ('CASH', 'Cash'),
     )
+    event = models.ForeignKey(
+            'booking.Event',
+            related_name='event_payins',
+            blank = True,
+            null =True,
+        )
     date = models.DateField(
             verbose_name='payment date'
         )
