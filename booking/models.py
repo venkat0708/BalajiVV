@@ -5,7 +5,7 @@ from django.core.validators import RegexValidator
 from django.core.urlresolvers import reverse
 from django.core.validators import RegexValidator, MinValueValidator,MaxValueValidator
 from django.dispatch import receiver
-from django.db.models.signals import post_save
+from django.db.models.signals import post_save, pre_save
 from django.utils import timezone
 
 from core.models import BaseEntity
@@ -84,8 +84,8 @@ class Event(BaseEntity):
             null=True,
             validators=[
             MinValueValidator(
-                10,
-                message = 'Advance should be greater than 10'
+                0,
+                message = 'Advance should be greater than 0'
             ),
 
             MaxValueValidator(
@@ -273,3 +273,85 @@ def generate_or_modify_invoice_and_bills_based_on_event_state(sender, **kwargs):
                 bill.delete()
             except:
                 pass
+
+@receiver(post_save, sender = Payin)
+def update_event_invoice_based_on_payin(sender,instance, created, **kwargs):
+    payin = instance
+    #print(dir(instance))
+    if created:
+        try:
+            event = Event.objects.get(pk = payin.event.id )
+            if event.status != 'COMPLETED':
+                print('advance before save in post_save in create is: ', event.advance)
+                event.advance = event.advance + payin.amount
+                event.save()
+                print('advance after save in post_save in create is: ' , event.advance)
+            else:
+                invoice = Invoice.objects.get(event = event.id)
+                if invoice.paid + payin.amount <= invoice.amount:
+                    print('post_save before save :',invoice.paid )
+                    invoice.paid = (invoice.paid + payin.amount)
+                    print(invoice.paid)
+                    if invoice.paid == invoice.amount:
+                        invoice.status = 'PAID'
+                        invoice.event = event
+                        invoice.save()
+
+                    else:
+                        invoice.status = 'PARTIAL_PAYMENT'
+                        invoice.event = event
+                        invoice.save()
+
+        finally:
+            #del instance._del
+            pass
+    else:
+        event = Event.objects.get(pk = payin.event.id )
+        if event.status != 'COMPLETED':
+            print('advance before save in post_save in modify is: ' ,event.advance)
+            event.advance = event.advance + payin.amount
+            event.save()
+            print('advance after save in post_save in modify is: ' , event.advance)
+        else:
+            invoice = Invoice.objects.get(event = event.id)
+            if invoice.paid + payin.amount <= invoice.amount:
+                #print(invoice.paid + payin.amount)
+                print('post_save before save in update :',invoice.paid)
+                invoice.paid = (invoice.paid + payin.amount)
+                print(invoice.paid)
+                if invoice.paid == invoice.amount:
+                    invoice.status = 'PAID'
+                    invoice.save()
+                    print('post_save after save in paid in update :',invoice.paid)
+                    print('paid')
+                else:
+                    invoice.status = 'PARTIAL_PAYMENT'
+                    invoice.save()
+                    print('post_save after save in partial payment in update :',invoice.paid)
+                    print('partial payment')
+
+@receiver(pre_save, sender = Payin)
+def update_event_invoice_based_on_payin_pre_save(sender, instance,  **kwargs):
+    payin = instance
+    try:
+        past_payin = Payin.objects.get(id = payin.id)
+        event = Event.objects.get(pk = payin.event.id)
+        if event.status != 'COMPLETED':
+            print('advance before save in pre_save is: ', event.advance)
+            event.advance = event.advance - past_payin.amount
+            event.save()
+            print('advance aftre save in pre_save is: ', event.advance)
+        else:
+            invoice = Invoice.objects.get(id = past_payin.invoice.id)
+            print('paid before save in pre_save is: ', invoice.paid)
+            if invoice.status in ['PARTIAL_PAYMENT', 'PAID']:
+                invoice.paid = invoice.paid - past_payin.amount
+                if invoice.paid > 0:
+                    invoice.status = 'PARTIAL_PAYMENT'
+                else:
+                    invoice.status = 'CONFIRMED'
+            invoice.save()
+            print('paid after save in pre_save is: ', invoice.paid)
+        print('try is successful')
+    except:
+        print('failed in payment')

@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block title %}
+
+Payin
+
+{% endblock %}
+
+{% block content %}
+<div class="container">
+
+  <div class="row">
+    <div class="col-sm-12">
+
+      <h2>{{payin.event}}</h2>
+      <a href="{% url 'accounting:Payin_Update' payin.id %}"><button class="btn btn-primary">Update</button></a>
+      <a href="{% url 'accounting:Payin_Delete' payin.id %}"><button class="btn btn-primary">Delete</button></a>
+    </div>
+  </div>
+
+
+</div>
+{% endblock content %}

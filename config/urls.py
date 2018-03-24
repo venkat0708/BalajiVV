@@ -20,6 +20,7 @@ urlpatterns = [
     url(r'^customers/', include('customers.urls', namespace='customers')),
     url(r'^products/', include('products.urls', namespace='products')),
     url(r'^booking/', include('booking.urls', namespace='booking')),
+    url(r'^accounting/', include('accounting.urls', namespace='accounting')),
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 

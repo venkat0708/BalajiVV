@@ -1,6 +1,7 @@
 
 from django.db import models
 from django.core.validators import RegexValidator, MinValueValidator,MaxValueValidator
+from django.core.urlresolvers import reverse
 
 
 from core.models import BaseEntity
@@ -45,55 +46,6 @@ class Commission_Structure(BaseEntity):
     def get_delete_url(self):
         return reverse('accounting:Commission_Structure_Delete', kwargs={'pk': self.id})
 
-class Payin(BaseEntity):
-    """ Payins from all customers"""
-    MODE_CHOICES=(
-        ('BANK', 'Bank'),
-        ('CHEQUE', 'Cheque'),
-        ('DD', 'Demand Draft'),
-        ('CASH', 'Cash'),
-    )
-    event = models.ForeignKey(
-            'booking.Event',
-            related_name='event_payins',
-            blank = True,
-            null =True,
-        )
-    date = models.DateField(
-            verbose_name='payment date'
-        )
-    time = models.TimeField(
-            verbose_name='payment time'
-
-        )
-    amount = models.IntegerField(
-            default=500,
-            validators=[
-                MinValueValidator(
-                    10,
-                    message = 'Amount should be greater than 10'
-                ),
-
-                MaxValueValidator(
-                    10000000,
-                    message = 'Amount should be less than 10000000'
-                ),
-            ]
-        )
-    mode = models.CharField(
-        max_length =15,
-        choices = MODE_CHOICES,
-        default = 'CASH',
-    )
-
-    def get_absolute_url(self):
-        return reverse('accounting:Payin_Detail', kwargs={'pk': self.id})
-
-    def get_update_url(self):
-        return reverse('accounting:Payin_Update', kwargs={'pk': self.id})
-
-    def get_delete_url(self):
-        return reverse('accounting:Payin_Delete', kwargs={'pk': self.id})
 
 class Payout(BaseEntity):
     """ Payout to all vendors"""
@@ -196,10 +148,6 @@ class Invoice(BaseEntity):
                     message = 'Amount should be less than 10000000'
                 ),
             ]
-        )
-    payins = models.ManyToManyField(
-            Payin,
-            related_name='Payins'
         )
 
     def get_absolute_url(self):
@@ -354,3 +302,66 @@ class Commission(BaseEntity):
 
     def get_delete_url(self):
         return reverse('accounting:Commission_Delete', kwargs={'pk': self.id})
+
+
+class Payin(BaseEntity):
+    """ Payins from all customers"""
+    MODE_CHOICES=(
+        ('BANK', 'Bank'),
+        ('CHEQUE', 'Cheque'),
+        ('DD', 'Demand Draft'),
+        ('CASH', 'Cash'),
+    )
+    customer = models.ForeignKey(
+            'customers.Customer',
+            related_name='customer_payins',
+            blank = True,
+            null = True,
+        )
+    event = models.ForeignKey(
+            'booking.Event',
+            related_name='event_payins',
+            blank = True,
+            null =True,
+        )
+    date = models.DateField(
+            verbose_name='payment date'
+        )
+    time = models.TimeField(
+            verbose_name='payment time'
+
+        )
+    amount = models.IntegerField(
+            default=500,
+            validators=[
+                MinValueValidator(
+                    10,
+                    message = 'Amount should be greater than 10'
+                ),
+
+                MaxValueValidator(
+                    10000000,
+                    message = 'Amount should be less than 10000000'
+                ),
+            ]
+        )
+    mode = models.CharField(
+        max_length =15,
+        choices = MODE_CHOICES,
+        default = 'CASH',
+    )
+    invoice = models.ForeignKey(
+            Invoice,
+            related_name='payins',
+            blank = True,
+            null = True,
+        )
+
+    def get_absolute_url(self):
+        return reverse('accounting:Payin_Detail', kwargs={'id': self.id})
+
+    def get_update_url(self):
+        return reverse('accounting:Payin_Update', kwargs={'id': self.id})
+
+    def get_delete_url(self):
+        return reverse('accounting:Payin_Delete', kwargs={'id': self.id})
