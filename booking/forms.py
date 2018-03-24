@@ -1,8 +1,9 @@
 from django import forms
+from django.db.models import Q
 
 from crispy_forms.helper import FormHelper
 
-from .models import Booked_Service
+from .models import Booked_Service, Event
 
 class Booked_Service_Form(forms.ModelForm):
 	"""docstring for CustomerForm"""
@@ -15,3 +16,7 @@ class Booked_Service_Form(forms.ModelForm):
 	class Meta:
 		model = Booked_Service
 		exclude = ['']
+
+	def __init__(self, *args, **kwargs):
+		super(Booked_Service_Form, self).__init__(*args, **kwargs)
+		self.fields['event'].queryset = Event.objects.filter(~Q(status='COMPLETED'))
