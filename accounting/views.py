@@ -6,8 +6,8 @@ from django.core.urlresolvers import reverse
 from django.urls import reverse_lazy
 from django.db.models import F
 
-from .models import Payin, Invoice, Commission
-from .forms import PayinForm
+from .models import Payin, Invoice, Commission, PayCommissionOrSalary
+from .forms import PayinForm, PayCommissionOrSalaryForm
 
 
 def Permission_Check(user):
@@ -63,6 +63,56 @@ def Payin_Delete(request,id):
 		form = PayinForm(instance = payin)
 	return render(request, 'payins/Payin_Delete.html', {'form': form, 'id':id})
 
+@login_required
+@user_passes_test(Permission_Check,redirect_field_name= None)
+def PayCommissionOrSalary_Index(request):
+    payouts = PayCommissionOrSalary.objects.all()
+    return render(request,'payouts_commission/Payout_Commission_Index.html', {'payouts_list':payouts})
+
+@login_required
+@user_passes_test(Permission_Check,redirect_field_name= None)
+def PayCommissionOrSalary_Add(request):
+	if request.method == 'POST':
+		form = PayCommissionOrSalaryForm(request.POST)
+		if form.is_valid():
+			form.save()
+			return HttpResponseRedirect(reverse('accounting:PayCommissionOrSalary_Index'))
+	else:
+		form = PayCommissionOrSalaryForm()
+	return render(request, 'payouts_commission/Payout_Commission_Add.html',{'form':form})
+
+
+@login_required
+@user_passes_test(Permission_Check,redirect_field_name= None)
+def PayCommissionOrSalary_Update(request,id):
+	payout = get_object_or_404(PayCommissionOrSalary,pk=id)
+	form = PayCommissionOrSalaryForm(request.POST or None,instance = payout)
+	if form.is_valid():
+		form.save()
+		return HttpResponseRedirect(reverse('accounting:PayCommissionOrSalary_Index'))
+	return render(request, 'payouts_commission/Payout_Commission_Update.html',{'form':form, 'id':payout.id})
+
+@login_required
+@user_passes_test(Permission_Check,redirect_field_name= None)
+def PayCommissionOrSalary_Detail(request, id):
+	payout = get_object_or_404(PayCommissionOrSalary,pk=id)
+	return render(request, 'payouts_commission/Payout_Commission_Detail.html', {'payout': payout})
+
+
+@login_required
+@user_passes_test(Permission_Check,redirect_field_name= None)
+def PayCommissionOrSalary_Delete(request,id):
+	payout = get_object_or_404(PayCommissionOrSalary,pk=id)
+
+	if request.method == 'POST':
+		form = PayCommissionOrSalaryForm(request.POST or None, instance=payout)
+
+		if form.is_valid():
+			payout.delete()
+			return HttpResponseRedirect(reverse('accounting:PayCommissionOrSalary_Index'))
+	else:
+		form = PayCommissionOrSalaryForm(instance = payout)
+	return render(request, 'payouts_commission/Payout_Commission_Delete.html', {'form': form, 'id':id})
 
 def Invoice_Index(request):
 	invoices = Invoice.objects.all().annotate(due_amount =F('amount') - F('paid'))

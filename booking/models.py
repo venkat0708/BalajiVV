@@ -169,6 +169,8 @@ class Booked_Service(BaseEntity):
             Staff,
             related_name='services_assigned',
             symmetrical=False,
+            null = True,
+            blank = True
         )
     vendor = models.ForeignKey(
             Vendor,
@@ -221,8 +223,9 @@ def generate_or_modify_invoice_and_bills_based_on_event_state(sender, **kwargs):
         for b in booked_services:
             for s in b.staff.all():
                 try:
-                    commission = Commission.objects.get(staff = s.id)
+                    commission = Commission.objects.get(booked_service = b.id)
                     commission.booked_service = b
+                    commission.event = event
                     commission.generated_date = timezone.now().date()
                     commission.due_date = timezone.now().date()
                     commission.amount = 500
@@ -231,6 +234,7 @@ def generate_or_modify_invoice_and_bills_based_on_event_state(sender, **kwargs):
                     commission = Commission(
                             staff = s,
                             booked_service = b,
+                            event = event,
                             amount = 500,
                             generated_date = timezone.now().date(),
                             paid = 0,
@@ -273,7 +277,6 @@ def generate_or_modify_invoice_and_bills_based_on_event_state(sender, **kwargs):
                 bill.delete()
             except:
                 pass
-
 @receiver(post_save, sender = Payin)
 def update_event_invoice_based_on_payin(sender,instance, created, **kwargs):
     payin = instance
@@ -289,9 +292,9 @@ def update_event_invoice_based_on_payin(sender,instance, created, **kwargs):
             else:
                 invoice = Invoice.objects.get(event = event.id)
                 if invoice.paid + payin.amount <= invoice.amount:
-                    print('post_save before save :',invoice.paid )
+                    #print('post_save before save :',invoice.paid )
                     invoice.paid = (invoice.paid + payin.amount)
-                    print(invoice.paid)
+                    #print(invoice.paid)
                     if invoice.paid == invoice.amount:
                         invoice.status = 'PAID'
                         invoice.event = event
@@ -308,27 +311,27 @@ def update_event_invoice_based_on_payin(sender,instance, created, **kwargs):
     else:
         event = Event.objects.get(pk = payin.event.id )
         if event.status != 'COMPLETED':
-            print('advance before save in post_save in modify is: ' ,event.advance)
+            #print('advance before save in post_save in modify is: ' ,event.advance)
             event.advance = event.advance + payin.amount
             event.save()
-            print('advance after save in post_save in modify is: ' , event.advance)
+            #print('advance after save in post_save in modify is: ' , event.advance)
         else:
             invoice = Invoice.objects.get(event = event.id)
             if invoice.paid + payin.amount <= invoice.amount:
                 #print(invoice.paid + payin.amount)
-                print('post_save before save in update :',invoice.paid)
+                #print('post_save before save in update :',invoice.paid)
                 invoice.paid = (invoice.paid + payin.amount)
-                print(invoice.paid)
+                #print(invoice.paid)
                 if invoice.paid == invoice.amount:
                     invoice.status = 'PAID'
                     invoice.save()
-                    print('post_save after save in paid in update :',invoice.paid)
-                    print('paid')
+                    #print('post_save after save in paid in update :',invoice.paid)
+                    #print('paid')
                 else:
                     invoice.status = 'PARTIAL_PAYMENT'
                     invoice.save()
-                    print('post_save after save in partial payment in update :',invoice.paid)
-                    print('partial payment')
+                    #print('post_save after save in partial payment in update :',invoice.paid)
+                    #print('partial payment')
 
 @receiver(pre_save, sender = Payin)
 def update_event_invoice_based_on_payin_pre_save(sender, instance,  **kwargs):
@@ -337,13 +340,13 @@ def update_event_invoice_based_on_payin_pre_save(sender, instance,  **kwargs):
         past_payin = Payin.objects.get(id = payin.id)
         event = Event.objects.get(pk = payin.event.id)
         if event.status != 'COMPLETED':
-            print('advance before save in pre_save is: ', event.advance)
+
             event.advance = event.advance - past_payin.amount
             event.save()
-            print('advance aftre save in pre_save is: ', event.advance)
+
         else:
             invoice = Invoice.objects.get(id = past_payin.invoice.id)
-            print('paid before save in pre_save is: ', invoice.paid)
+            #print('paid before save in pre_save is: ', invoice.paid)
             if invoice.status in ['PARTIAL_PAYMENT', 'PAID']:
                 invoice.paid = invoice.paid - past_payin.amount
                 if invoice.paid > 0:
@@ -351,7 +354,7 @@ def update_event_invoice_based_on_payin_pre_save(sender, instance,  **kwargs):
                 else:
                     invoice.status = 'CONFIRMED'
             invoice.save()
-            print('paid after save in pre_save is: ', invoice.paid)
-        print('try is successful')
+
+
     except:
-        print('failed in payment')
+        pass

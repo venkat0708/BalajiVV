@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block title %}
+
+Payout Commission or Salary
+
+{% endblock %}
+
+{% block content %}
+<div class="container">
+
+  <div class="row">
+    <div class="col-sm-12">
+
+      <h2>{{payout.staff}}</h2>
+      <a href="{% url 'accounting:PayCommissionOrSalary_Update' payout.id %}"><button class="btn btn-primary">Update</button></a>
+      <a href="{% url 'accounting:PayCommissionOrSalary_Delete' payout.id %}"><button class="btn btn-primary">Delete</button></a>
+    </div>
+  </div>
+
+
+</div>
+{% endblock content %}

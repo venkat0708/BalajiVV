@@ -3,7 +3,7 @@ from django import forms
 
 from crispy_forms.helper import FormHelper
 
-from .models import Payin
+from .models import Payin, PayCommissionOrSalary
 
 class PayinForm(forms.ModelForm):
     """ form for payins"""
@@ -13,4 +13,15 @@ class PayinForm(forms.ModelForm):
 
     class Meta:
         model = Payin
+        exclude = ['']
+
+class PayCommissionOrSalaryForm(forms.ModelForm):
+    """ form for PayCommissionOrSalary """
+
+    helper = FormHelper()
+    helper.form_tag = False
+    helper.form_style = 'inline'
+
+    class Meta:
+        model = PayCommissionOrSalary
         exclude = ['']
