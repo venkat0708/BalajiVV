@@ -5,6 +5,11 @@ from crispy_forms.helper import FormHelper
 
 from .models import Booked_Service, Event
 
+
+class DateInput(forms.DateInput):
+	input_type = 'date'
+
+
 class Booked_Service_Form(forms.ModelForm):
 	"""docstring for CustomerForm"""
 
@@ -16,6 +21,10 @@ class Booked_Service_Form(forms.ModelForm):
 	class Meta:
 		model = Booked_Service
 		exclude = ['']
+		widgets = {
+			'start_date' : DateInput(),
+			'end_date' : DateInput(),
+		}
 
 	def __init__(self, *args, **kwargs):
 		super(Booked_Service_Form, self).__init__(*args, **kwargs)

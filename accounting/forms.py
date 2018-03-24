@@ -6,6 +6,9 @@ from crispy_forms.helper import FormHelper
 from .models import Payin, PayCommissionOrSalary
 from booking.models import Event
 
+class DateInput(forms.DateInput):
+	input_type = 'date'
+
 class PayinForm(forms.ModelForm):
     """ form for payins"""
     helper = FormHelper()
@@ -15,6 +18,9 @@ class PayinForm(forms.ModelForm):
     class Meta:
         model = Payin
         exclude = ['']
+        widgets = {
+			'date' : DateInput(),
+		}
 
     def __init__(self, *args, **kwargs):
         super(PayinForm, self).__init__(*args, **kwargs)
@@ -30,3 +36,6 @@ class PayCommissionOrSalaryForm(forms.ModelForm):
     class Meta:
         model = PayCommissionOrSalary
         exclude = ['']
+        widgets = {
+			'date' : DateInput(),
+		}

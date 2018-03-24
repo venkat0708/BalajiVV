@@ -60,6 +60,8 @@ class Event(BaseEntity):
         )
     start_time = models.TimeField(
         verbose_name='Start Time',
+        blank=True,
+        null=True,
     )
     end_date = models.DateField(
         verbose_name='End Date',
