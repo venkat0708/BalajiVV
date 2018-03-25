@@ -5,6 +5,7 @@ from django.db import models
 from django.core.exceptions import ValidationError
 from django.core.validators import RegexValidator
 from django.utils.translation import ugettext_lazy as _
+from django.core.urlresolvers import reverse
 
 from core.models import BaseEntity
 from Balaji.users.models import User
@@ -143,3 +144,11 @@ class Staff(BaseEntity):
 
 	def __str__(self):
 		return self.name
+	def get_absolute_url(self):
+		return reverse('customers:Staff_Detail', kwargs={'pk': self.id})
+
+	def get_update_url(self):
+		return reverse('customers:Staff_Update', kwargs={'pk': self.id})
+
+	def get_delete_url(self):
+		return reverse('customers:Staff_Delete', kwargs={'pk': self.id})
