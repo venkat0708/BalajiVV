@@ -119,7 +119,7 @@ class Service(BaseEntity):
         max_length=80,
         validators=[
             RegexValidator(
-                regex='^[a-zA-Z\s]*$',
+                regex='^[0-9a-zA-Z\s]*$',
                  message='name should contain only alphabets',
                 code='invalid_name'
             ),

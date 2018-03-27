@@ -19,7 +19,7 @@ Services
       <a href="{% url 'products:Service_Create' %}"><button type="button" class="btn btn-primary">Add Service</button></a>
       <hr/>
 
- {% if services_list %}
+ {% if Services_list %}
  <table class="table table-striped">
   <thead>
     <tr>
@@ -34,7 +34,7 @@ Services
     </tr>
   </thead>
   <tbody>
-  {% for s in services_list %}
+  {% for s in Services_list %}
     <tr>
       <th scope="row">{{ forloop.counter }}</th>
       <td><a href="{{ s.get_absolute_url }}">{{ s.name }}</a></td>

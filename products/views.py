@@ -151,7 +151,7 @@ class ServiceCreateView(LoginRequiredMixin, UserPassesTestMixin,generic.edit.Cre
         return  'product management' in [i.name for i in self.request.user.groups.all()]
 
     def get_success_url(self):
-        return reverse('products:Product_Index')
+        return reverse('products:Service_Index')
 
     def test_func(self):
         print (self.request.user.groups.all())

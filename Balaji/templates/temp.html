@@ -1,0 +1,77 @@
+<nav class="navbar navbar-toggleable-md navbar-light container " style="background-color: #e3f2fd;">
+  <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <a class="navbar-brand" href="{% url 'home' %}">Balaji</a>
+
+  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item active">
+        <a class="nav-link" href="{% url 'home' %}">Home <span class="sr-only">(current)</span></a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="{% url 'about' %}">About</a>
+      </li>
+
+      {% if request.user.is_superuser %}
+        <li class="nav-item">
+        <a class="nav-link" href="{% url 'customers:index' %}">Customers</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="{% url 'customers:vendors' %}">Vendors</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="{% url 'products:Category_Index' %}">Categories</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="/admin/">Admin</a>
+      </li>
+
+
+
+    </ul>
+
+    <ul class="navbar-nav">
+      <li class="nav-item dropdown">
+  <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+    Dropdown
+  </a>
+  <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+    <a class="dropdown-item" href="#">Action</a>
+    <a class="dropdown-item" href="#">Another action</a>
+    <a class="dropdown-item" href="#">Something else here</a>
+  </div>
+</li>
+    </ul>
+      {% endif %}
+      {% if request.user.is_authenticated %}
+        <div class="collapse navbar-collapse justify-content-end" id="navbarCollapse">
+      <ul class="navbar-nav">
+        <li class="nav-item">
+                {# URL provided by django-allauth/account/urls.py #}
+                <a class="nav-link" href="{% url 'users:detail' request.user.username  %}">{% trans "My Profile" %}</a>
+              </li>
+              <li class="nav-item">
+                {# URL provided by django-allauth/account/urls.py #}
+                <a class="nav-link " href="{% url 'account_logout' %}">{% trans "Sign Out" %}</a>
+              </li>
+      </ul>
+</div>
+
+      {% else %}
+        <div class="collapse navbar-collapse justify-content-end" id="navbarCollapse">
+      <ul class="navbar-nav">
+              <li class="nav-item">
+                {# URL provided by django-allauth/account/urls.py #}
+                <a id="sign-up-link" class="nav-link" href="{% url 'account_signup' %}">{% trans "Sign Up" %}</a>
+              </li>
+              <li class="nav-item">
+                {# URL provided by django-allauth/account/urls.py #}
+                <a id="log-in-link" class="nav-link" href="{% url 'account_login' %}">{% trans "Sign In" %}</a>
+              </li>
+            </ul>
+</div>
+      {% endif %}
+
+  </div>
+</nav>

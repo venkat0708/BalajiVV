@@ -15,81 +15,112 @@
     <link rel="shortcut icon" type="image/png" href="{% static 'images/favicon.ico' %}"/>
     {% block css %}
     <!-- Latest compiled and minified Bootstrap 4 Alpha 4 CSS -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 
     <!-- Your stuff: Third-party CSS libraries go here -->
-    
+
     <!-- This file stores project-specific CSS -->
     <link href="{% static 'css/project.css' %}" rel="stylesheet">
-    
+
     {% endblock %}
 
   </head>
 
   <body>
 
-    <div class="m-b-1">
-      <nav class="navbar navbar-toggleable-md navbar-light container " style="background-color: #e3f2fd;">
-        <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-          <span class="navbar-toggler-icon"></span>
-        </button>
-        <a class="navbar-brand" href="{% url 'home' %}">Balaji</a>
+    <div class="">
+      <nav class="navbar  navbar-dark bg-primary navbar-expand-lg ">
+    <a class="navbar-brand" href="/">Balaji</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
 
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-          <ul class="navbar-nav mr-auto">
-            <li class="nav-item active">
-              <a class="nav-link" href="{% url 'home' %}">Home <span class="sr-only">(current)</span></a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="{% url 'about' %}">About</a>
-            </li>
-            
-            {% if request.user.is_superuser %}
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav mr-auto">
+        <li class="nav-item active">
+          <a class="nav-link" href="{% url 'home' %}">Home <span class="sr-only">(current)</span></a>
+        </li>
+        {% if request.user.is_superuser %}
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            People
+          </a>
+          <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+            <a class="dropdown-item" href="{% url 'customers:index' %}">Customers</a>
+            <a class="dropdown-item" href="{% url 'customers:vendors' %}">Vendors</a>
+            <a class="dropdown-item" href="{% url 'customers:Staff_Index' %}">Staff</a>
+          </div>
+        </li>
+
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Booking
+          </a>
+          <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+            <a class="dropdown-item" href="{% url 'booking:Event_Index' %}">Events</a>
+            <a class="dropdown-item" href="{% url 'booking:Booked_Service_Index' %}">Services</a>
+          </div>
+        </li>
+
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Accounting
+          </a>
+          <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+            <a class="dropdown-item" href="{% url 'accounting:Invoice_Index' %}">Invoices</a>
+            <a class="dropdown-item" href="{% url 'accounting:Commission_Index' %}">Commissions</a>
+            <a class="dropdown-item" href="{% url 'accounting:Payin_Index' %}">Payins</a>
+            <a class="dropdown-item" href="{% url 'accounting:PayCommissionOrSalary_Index' %}">Commission Payouts</a>
+          </div>
+        </li>
+
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Products
+          </a>
+          <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+            <a class="dropdown-item" href="{% url 'products:Category_Index' %}">Categories</a>
+            <a class="dropdown-item" href="{% url 'products:Service_Index' %}">Services</a>
+            <a class="dropdown-item" href="{% url 'products:Product_Index' %}">Products</a>
+          </div>
+        </li>
+
+        <li class="nav-item">
+          <a class="nav-link" href="/admin/">Admin</a>
+        </li>
+      </ul>
+      {% endif %}
+
+      {% if request.user.is_authenticated %}
+        <div class="collapse navbar-collapse justify-content-end" id="navbarCollapse">
+      <ul class="navbar-nav">
+        <li class="nav-item">
+                {# URL provided by django-allauth/account/urls.py #}
+                <a class="nav-link" href="{% url 'users:detail' request.user.username  %}">{% trans "My Profile" %}</a>
+              </li>
               <li class="nav-item">
-              <a class="nav-link" href="{% url 'customers:index' %}">Customers</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="{% url 'customers:vendors' %}">Vendors</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="{% url 'products:Category_Index' %}">Categories</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="/admin/">Admin</a>
-            </li>
-           </ul>
-            {% endif %}
-            {% if request.user.is_authenticated %}
-            	<div class="collapse navbar-collapse justify-content-end" id="navbarCollapse">
-  					<ul class="navbar-nav">
-    					<li class="nav-item">
-                			{# URL provided by django-allauth/account/urls.py #}
-                			<a class="nav-link" href="{% url 'users:detail' request.user.username  %}">{% trans "My Profile" %}</a>
-              			</li>
-              			<li class="nav-item">
-                			{# URL provided by django-allauth/account/urls.py #}
-                			<a class="nav-link " href="{% url 'account_logout' %}">{% trans "Sign Out" %}</a>
-              			</li>
-  					</ul>
-			</div>
-              
-            {% else %}
-              <div class="collapse navbar-collapse justify-content-end" id="navbarCollapse">
-  					<ul class="navbar-nav">
-              			<li class="nav-item">
-                			{# URL provided by django-allauth/account/urls.py #}
-                			<a id="sign-up-link" class="nav-link" href="{% url 'account_signup' %}">{% trans "Sign Up" %}</a>
-              			</li>
-              			<li class="nav-item">
-                			{# URL provided by django-allauth/account/urls.py #}
-                			<a id="log-in-link" class="nav-link" href="{% url 'account_login' %}">{% trans "Sign In" %}</a>
-              			</li>
-              		</ul>
-			</div>
-            {% endif %}
-          
-        </div>
-      </nav>
+                {# URL provided by django-allauth/account/urls.py #}
+                <a class="nav-link " href="{% url 'account_logout' %}">{% trans "Sign Out" %}</a>
+              </li>
+      </ul>
+</div>
+
+      {% else %}
+        <div class="collapse navbar-collapse justify-content-end" id="navbarCollapse">
+      <ul class="navbar-nav">
+              <li class="nav-item">
+                {# URL provided by django-allauth/account/urls.py #}
+                <a id="sign-up-link" class="nav-link" href="{% url 'account_signup' %}">{% trans "Sign Up" %}</a>
+              </li>
+              <li class="nav-item">
+                {# URL provided by django-allauth/account/urls.py #}
+                <a id="log-in-link" class="nav-link" href="{% url 'account_login' %}">{% trans "Sign In" %}</a>
+              </li>
+            </ul>
+</div>
+      {% endif %}
+    </div>
+  </nav>
 
     </div>
 
@@ -114,19 +145,17 @@
     <!-- Placed at the end of the document so the pages load faster -->
     {% block javascript %}
       <!-- Required by Bootstrap v4 Alpha 4 -->
-      <script src="https://use.fontawesome.com/640bd40708.js"></script>	
-      <script src="https://code.jquery.com/jquery-3.1.1.slim.min.js" integrity="sha384-A7FZj7v+d/sdmMqp/nOQwliLvUsJfDHW+k9Omg/a/EheAdgtzNs3hpfag6Ed950n" crossorigin="anonymous"></script>
-      <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js" integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb" crossorigin="anonymous"></script>
-      <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js" integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn" crossorigin="anonymous"></script>
-	  
+      <script src="https://use.fontawesome.com/640bd40708.js"></script>
+      <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+      <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
       <!-- Your stuff: Third-party javascript libraries go here -->
 
       <!-- place project specific Javascript in this file -->
-      
+
       <script src="{% static 'js/project.js' %}"></script>
-      
+
 
     {% endblock javascript %}
   </body>
 </html>
- 
