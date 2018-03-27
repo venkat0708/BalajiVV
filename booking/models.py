@@ -5,7 +5,7 @@ from django.core.validators import RegexValidator
 from django.core.urlresolvers import reverse
 from django.core.validators import RegexValidator, MinValueValidator,MaxValueValidator
 from django.dispatch import receiver
-from django.db.models.signals import post_save, pre_save
+from django.db.models.signals import post_save, pre_save, pre_delete
 from django.utils import timezone
 
 from core.models import BaseEntity
@@ -347,7 +347,7 @@ def update_event_invoice_based_on_payin_pre_save(sender, instance,  **kwargs):
             event.save()
 
         else:
-            invoice = Invoice.objects.get(id = past_payin.invoice.id)
+            invoice = Invoice.objects.get(event = event.id)
             #print('paid before save in pre_save is: ', invoice.paid)
             if invoice.status in ['PARTIAL_PAYMENT', 'PAID']:
                 invoice.paid = invoice.paid - past_payin.amount
@@ -360,3 +360,24 @@ def update_event_invoice_based_on_payin_pre_save(sender, instance,  **kwargs):
 
     except:
         pass
+
+@receiver(pre_delete, sender = Payin)
+def update_event_invoice_based_on_payin_pre_delete(sender, instance, **kwargs):
+    print('triggered')
+    payin = instance
+    try:
+        Deleted_Payin = Payin.objects.get(id = payin.id)
+        event = Event.objects.get(pk = payin.event.id)
+        print(event)
+        invoice = Invoice.objects.get(event = event.id)
+        print(invoice)
+        if invoice.status in ['PARTIAL_PAYMENT', 'PAID']:
+            invoice.paid = invoice.paid - Deleted_Payin.amount
+            if invoice.paid > 0:
+                invoice.status = 'PARTIAL_PAYMENT'
+            else:
+                invoice.status = 'CONFIRMED'
+        invoice.save()
+
+    except:
+        print('failed')
