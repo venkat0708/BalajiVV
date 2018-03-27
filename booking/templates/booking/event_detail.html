@@ -13,50 +13,313 @@ Events
 
   <div class="row">
     <div class="col-sm-12">
+      <br><br>
 
-      <h2>details of {{ event}}</h2>
-      <br/>
+        <div class="card">
+          <div class="card-header">
+            <h3 >
+              details of event {{ event}}
+               <div class="float-right">
+                <h2  >
+                  <a href="{% url 'booking:Event_Update' event.id %}"><button type="button" name="button" class="btn btn-primary btn-lg">Edit</button></a>
+                  <a href="{% url 'booking:Event_Delete' event.id %}"><button type="button" name="button" class="btn btn-danger btn-lg">Delete</button></a>
+                </h2>
+               </div>
+             </h3>
+          </div>
+          <div class="card-body">
+            <div class="row">
+                <div class="col-sm-6">
+                  <div class="card">
+                    <div class="card-body">
+                      <h5 class="card-title">
+                        <div class="row">
+                          <div class="col-sm-4">
+                            <span class="text-info">Customer </span>
+                          </div>
+                          <div class="col-sm-1">
+                            :
+                          </div>
+                          <div class="col-sm-4">
+                            <a href="{% url 'customers:detail' event.customer.id %}">{{ event.customer}}</a>
+                          </div>
+                        </h5>
+                        <h5 class="card-title">
+                          <div class="row">
+                            <div class="col-sm-4">
+                              <span class="text-info">City </span>
+                            </div>
+                            <div class="col-sm-1">
+                              :
+                            </div>
+                            <div class="col-sm-4">
+                              {{ event.city}}
+                            </div>
+                          </h5>
+                          <h5 class="card-title">
+                            <div class="row">
+                              <div class="col-sm-4">
+                                <span class="text-info">Start Date </span>
+                              </div>
+                              <div class="col-sm-1">
+                                :
+                              </div>
+                              <div class="col-sm-4">
+                                {{ event.start_date}}
+                              </div>
+                            </h5>
+                            <h5 class="card-title">
+                              <div class="row">
+                                <div class="col-sm-4">
+                                  <span class="text-info">Start Time </span>
+                                </div>
+                                <div class="col-sm-1">
+                                  :
+                                </div>
+                                <div class="col-sm-4">
+                                  {{ event.start_time}}
+                                </div>
+                              </h5>
+                          {% if event.status == 'COMPLETED'  %}
+                              <h5 class="card-title">
+                                <div class="row">
+                                  <div class="col-sm-4">
+                                    <span class="text-info">Amount </span>
+                                  </div>
+                                  <div class="col-sm-1">
+                                    :
+                                  </div>
+                                  <div class="col-sm-4">
+                                    {% for i in event.invoice.all  %}
+                                    ₹   {{ i.amount }}
+                                    {% endfor %}
+                                  </div>
+                                </h5>
+                          {% endif %}
 
-      {% if event.services_booked.all %}
-      <table class="table table-striped">
-       <thead>
-         <tr>
-           <th>#</th>
-           <th>Service</th>
-           <th>start_date</th>
-           <th>start_time</th>
-           <th>end_date</th>
-           <th>end_time</th>
-           <th>Quantity</th>
-           <th>Price</th>
-           <th>staff</th>
-           <th>Vendor</th>
-           <th></th>
-         </tr>
-       </thead>
-       <tbody>
-      {% for s in event.services_booked.all  %}
-         <tr>
-           <th scope="row">{{ forloop.counter }}</th>
-           <td><a href="{% url 'booking:Booked_Service_Detail' s.id %}">{{ s.service }}</a></td>
-           <td>{{ s.start_date }}</td>
-           <td>{{ s.start_time }}</td>
-           <td>{{ s.end_date }}</td>
-           <td>{{ s.end_time }}</td>
-           <td>{{ s.quantity }}</td>
-           <td>{{ s.price }}</td>
-           <td>
-             {% for i in s.staff.all %}
-                <p>{{ i.name }}</p>
-              {% endfor %}
-           </td>
-           <td>{{ s.vendor }}</td>
-           <td><a href="{% url 'booking:Booked_Service_Delete' s.id %}"><button type="button" class="btn btn-danger">Delete</button></a></td>
-         </tr>
-         {% endfor %}
-       </tbody>
-     </table>
-      {% endif %}
+                    </div>
+                  </div>
+                </div>
+                <div class="col-sm-6">
+                  <div class="card">
+                    <div class="card-body">
+                      <h5 class="card-title">
+                        <div class="row">
+                          <div class="col-sm-4">
+                            <span class="text-info">Status </span>
+                          </div>
+                          <div class="col-sm-1">
+                            :
+                          </div>
+                          <div class="col-sm-4">
+                            {{ event.status}}
+                          </div>
+                        </h5>
+                        <h5 class="card-title">
+                          <div class="row">
+                            <div class="col-sm-4">
+                              <span class="text-info">Venue </span>
+                            </div>
+                            <div class="col-sm-1">
+                              :
+                            </div>
+                            <div class="col-sm-4">
+                              {{ event.venue}}
+                            </div>
+                          </h5>
+                          <h5 class="card-title">
+                            <div class="row">
+                              <div class="col-sm-4">
+                                <span class="text-info">End Date </span>
+                              </div>
+                              <div class="col-sm-1">
+                                :
+                              </div>
+                              <div class="col-sm-4">
+                                {{ event.end_date}}
+                              </div>
+                            </h5>
+                            <h5 class="card-title">
+                              <div class="row">
+                                <div class="col-sm-4">
+                                  <span class="text-info">End Time</span>
+                                </div>
+                                <div class="col-sm-1">
+                                  :
+                                </div>
+                                <div class="col-sm-4">
+                                  {{ event.end_time}}
+                                </div>
+                              </h5>
+
+
+                              {% if event.status == 'COMPLETED'  %}
+                                  <h5 class="card-title">
+                                    <div class="row">
+                                      <div class="col-sm-4">
+                                        <span class="text-info">Paid </span>
+                                      </div>
+                                      <div class="col-sm-1">
+                                        :
+                                      </div>
+                                      <div class="col-sm-4">
+                                        {% for i in event.invoice.all  %}
+                                          ₹ {{ i.paid }}
+                                        {% endfor %}
+                                      </div>
+                                    </h5>
+                              {% endif %}
+
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <br><br>
+              {% if event.services_booked.all %}
+          <div class="card">
+            <div class="card-header">
+              <h4>Booked Services</h4>
+            </div>
+              <div class="card-body">
+
+                <table class="table table-striped">
+                 <thead>
+                   <tr>
+                     <th>#</th>
+                     <th>Service</th>
+                     <th>Start date</th>
+                     <th>Start time</th>
+                     <th>End date</th>
+                     <th>End time</th>
+                     <th>Quantity</th>
+                     <th>Price</th>
+                     <th>staff</th>
+                     <th>Vendor</th>
+                     {% if event.status != 'COMPLETED' %}
+                     <th></th>
+                     <th></th>
+                     {% endif %}
+                   </tr>
+                 </thead>
+                 <tbody>
+                {% for s in event.services_booked.all  %}
+                   <tr>
+                     <th scope="row">{{ forloop.counter }}</th>
+                     <td><a href="{% url 'booking:Booked_Service_Detail' s.id %}">{{ s.service }}</a></td>
+                     <td>{{ s.start_date }}</td>
+                     <td>{{ s.start_time }}</td>
+                     <td>{{ s.end_date }}</td>
+                     <td>{{ s.end_time }}</td>
+                     <td>{{ s.quantity }}</td>
+                     <td>{{ s.price }}</td>
+                     <td>
+                       {% for i in s.staff.all %}
+                          <p>{{ i.name }}</p>
+                        {% endfor %}
+                     </td>
+                     <td>{{ s.vendor }}</td>
+                     {% if event.status != 'COMPLETED' %}
+                     <td><a href="{% url 'booking:Booked_Service_Update' s.id %}"><button type="button" class="btn btn-primary">Edit</button></a></td>
+                     <td><a href="{% url 'booking:Booked_Service_Delete' s.id %}"><button type="button" class="btn btn-danger">Delete</button></a></td>
+                     {% endif %}
+                   </tr>
+                   {% endfor %}
+                 </tbody>
+               </table>
+
+              </div>
+          </div> <!-- end of card 2 -->
+
+
+              {% endif %}
+
+              <br><br>
+
+          {% if  event.event_commissions.all %}
+              <div class="card">
+                <div class="card-header">
+                  <h4>Commissions</h4>
+                </div>
+                <div class="card-body">
+                  <table class="table table-striped">
+                   <thead>
+                     <tr>
+                       <th>#</th>
+                       <th>Staff Name</th>
+                       <th>Created Date</th>
+                       <th>Due Date</th>
+                       <th>Status</th>
+                       <th>Total Amount</th>
+                       <th>Paid Amount</th>
+                       <th></th>
+                       <th></th>
+                     </tr>
+                   </thead>
+                   <tbody>
+                  {% for c in event.event_commissions.all  %}
+                     <tr>
+                       <th scope="row">{{ forloop.counter }}</th>
+                       <td>{{ c.staff }}</td>
+                       <td>{{ c.generated_date }}</td>
+                       <td>{{ c.due_date }}</td>
+                       <td>{{ c.status }}</td>
+                       <td>{{ c.amount }}</td>
+                       <td>{{ c.paid }}</td>
+                       <td><button type="button" class="btn btn-primary">Edit</button></td>
+                       <td><button type="button" class="btn btn-danger">Delete</button></td>
+                     </tr>
+                     {% endfor %}
+                   </tbody>
+                 </table>
+                </div>
+              </div><!-- end card 3 -->
+              {% endif %}
+
+              <br><br>
+
+              {% if  event.event_payins.all %}
+                  <div class="card">
+                    <div class="card-header">
+                      <h4>Payins</h4>
+                    </div>
+                    <div class="card-body">
+                      <table class="table table-striped">
+                       <thead>
+                         <tr>
+                           <th>#</th>
+                           <th>Date</th>
+                           <th>Time</th>
+                           <th>Amount</th>
+                           <th>Mode</th>
+                           <th></th>
+                           <th></th>
+                         </tr>
+                       </thead>
+                       <tbody>
+                      {% for p in event.event_payins.all  %}
+                         <tr>
+                           <th scope="row">{{ forloop.counter }}</th>
+                           <td>{{ p.date }}</td>
+                           <td>{{ p.time }}</td>
+                           <td>{{ p.amount }}</td>
+                           <td>{{ p.mode }}</td>
+                           <td><a href="{% url 'accounting:Payin_Update' p.id %}"<button type="button" class="btn btn-primary">Edit</button></a></td>
+                           <td><a href="{% url 'accounting:Payin_Delete' p.id %}"<button type="button" class="btn btn-danger">Delete</button></a></td>
+                         </tr>
+                         {% endfor %}
+                       </tbody>
+                     </table>
+                    </div>
+                  </div><!-- end card 4 -->
+                  {% endif %}
+
+            </div>
+          </div>
+
+
+
+
 
     </div>
   </div>
