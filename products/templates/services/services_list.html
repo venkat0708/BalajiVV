@@ -30,6 +30,7 @@ Services
       <th>Category</th>
       <th>Quantity</th>
       <th></th>
+      <th></th>
 
     </tr>
   </thead>
@@ -40,10 +41,10 @@ Services
       <td><a href="{{ s.get_absolute_url }}">{{ s.name }}</a></td>
       <td>{{ s.description }}</td>
       <td>{{ s.price }}</td>
-      <td>{{ s.quantity }}</td>
       <td>{{ s.category }}</td>
-      <td><a href="{{ s.get_update_url }}"><button type="button" class="btn btn-primary"><i class="fa fa-pencil-square-o fa-2x" aria-hidden="true"></i></button></a>&nbsp;&nbsp;
-      <a href="{{ s.get_delete_url }}"><button type="button" class="btn btn-danger"><i class="fa fa-trash fa-2x" aria-hidden="true"></i></button></a></td>
+      <td>{{ s.quantity }}</td>
+      <td><a href="{{ s.get_update_url }}"><button type="button" class="btn btn-primary">Edit</button></a></td>
+      <td><a href="{{ s.get_delete_url }}"><button type="button" class="btn btn-danger">Delete</button></a></td>
     </tr>
     {% endfor %}
   </tbody>

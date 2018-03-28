@@ -7,9 +7,12 @@ from django.http import HttpResponse,HttpResponseRedirect
 from django.views.generic import DetailView
 from django.urls import reverse
 from django.contrib.auth.decorators import login_required, user_passes_test
+from django.utils import timezone
 
 from .models import Event,Booked_Service
 from .forms import Booked_Service_Form
+from accounting.forms import PayinForm
+
 
 class EventIndexView(LoginRequiredMixin,UserPassesTestMixin,generic.ListView):
     model = Event
@@ -29,6 +32,24 @@ class EventDetailView(LoginRequiredMixin,UserPassesTestMixin,generic.DetailView)
 
     def test_func(self):
         return  'event management' in [i.name for i in self.request.user.groups.all()]
+
+    def get_context_data(self, **kwargs):
+        # Call the base implementation first to get a context
+        context = super().get_context_data(**kwargs)
+        # add booked service form
+        bsf = Booked_Service_Form(initial = {'event':self.object})
+        amt= self.object.invoice.all()[0].amount - self.object.invoice.all()[0].paid
+        pf = PayinForm(initial = {
+                'event':self.object,
+                'customer':self.object.customer,
+                'date':timezone.now().date(),
+                'time':timezone.now().time(),
+                'amount': amt
+                })
+
+        context['booked_service_form'] = bsf
+        context['Payin_form'] = pf
+        return context
 
 
 class EventCreateView(LoginRequiredMixin, UserPassesTestMixin,generic.edit.CreateView):
@@ -83,8 +104,8 @@ def Booked_Service_Add(request):
 	if request.method == 'POST':
 		form = Booked_Service_Form(request.POST)
 		if form.is_valid():
-			form.save()
-			return HttpResponseRedirect(reverse('booking:Event_Index'))
+			service = form.save()
+			return HttpResponseRedirect(reverse('booking:Event_Detail', kwargs={'pk':service.event.id}))
 	else:
 		form = Booked_Service_Form()
 	return render(request, 'booked_services/booked_services_add.html',{'form':form})

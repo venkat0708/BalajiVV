@@ -225,7 +225,7 @@ def generate_or_modify_invoice_and_bills_based_on_event_state(sender, **kwargs):
         for b in booked_services:
             for s in b.staff.all():
                 try:
-                    commission = Commission.objects.get(booked_service = b.id)
+                    commission = Commission.objects.get(staff = s.id)
                     commission.booked_service = b
                     commission.event = event
                     commission.generated_date = timezone.now().date()

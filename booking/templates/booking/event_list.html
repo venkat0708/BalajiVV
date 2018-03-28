@@ -33,6 +33,7 @@ Events
       <th>End Time</th>
       <th>Status</th>
       <th></th>
+      <th></th>
 
     </tr>
   </thead>
@@ -48,8 +49,8 @@ Events
       <td>{{ e.end_date }}</td>
       <td>{{ e.end_time }}</td>
       <td>{{ e.status }}</td>
-      <td><a href="{{ e.get_update_url }}"><button type="button" class="btn btn-primary"><i class="fa fa-pencil-square-o fa-2x" aria-hidden="true"></i></button></a>&nbsp;&nbsp;
-      <a href="{{ e.get_delete_url }}"><button type="button" class="btn btn-danger"><i class="fa fa-trash fa-2x" aria-hidden="true"></i></button></a></td>
+      <td><a href="{{ e.get_update_url }}"><button type="button" class="btn btn-primary">Edit</button></a></td>
+      <td><a href="{{ e.get_delete_url }}"><button type="button" class="btn btn-danger">Delete</button></a></td>
     </tr>
     {% endfor %}
   </tbody>

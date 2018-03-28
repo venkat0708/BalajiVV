@@ -26,8 +26,8 @@ def Payin_Add(request):
 	if request.method == 'POST':
 		form = PayinForm(request.POST)
 		if form.is_valid():
-			form.save()
-			return HttpResponseRedirect(reverse('accounting:Payin_Index'))
+			payin = form.save()
+			return HttpResponseRedirect(reverse('booking:Event_Detail', kwargs={'pk':payin.event.id}))
 	else:
 		form = PayinForm()
 	return render(request, 'payins/Payin_Add.html',{'form':form})
