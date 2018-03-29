@@ -78,6 +78,25 @@ urlpatterns = [
         view=views.Invoice_Delete,
         name = 'Invoice_Delete'
         ),
+
+    url(
+        regex=r'bills/$',
+        view=views.Bill_Index,
+        name = 'Bill_Index'
+        ),
+
+    url(
+        regex=r'bills/update/(?P<id>[\d]+)/$',
+        view=views.Bill_Update,
+        name = 'Bill_Update'
+        ),
+
+    url(
+        regex=r'bills/delete/(?P<id>[\d]+)/$',
+        view=views.Bill_Delete,
+        name = 'Bill_Delete'
+        ),
+
     url(
         regex=r'commissions/$',
         view=views.Commission_Index,
@@ -101,6 +120,29 @@ urlpatterns = [
         view=views.Commission_Delete,
         name = 'Commission_Delete'
         ),
+    url(
+        regex=r'^commissionStructure/$',
+        view=views.CommissionStructureIndexView.as_view(),
+        name='Commission_Structure_Index'
+    ),
+
+    url(
+      regex=r'^commissionStructure/add/$',
+      view = views.CommissionStructureCreateView.as_view(),
+      name = 'Commission_Structure_Add'
+    ),
+
+    url(
+      regex=r'^commissionStructure/update/(?P<pk>[\d]+)/$',
+      view = views.CommissionStructureUpdateView.as_view(),
+      name = 'Commission_Structure_Update'
+    ),
+
+    url(
+      regex=r'^commissionStructure/delete/(?P<pk>[\d]+)/$',
+      view = views.CommissionStructureDeleteView.as_view(),
+      name = 'Commission_Structure_Delete'
+    ),
 
 
 ]

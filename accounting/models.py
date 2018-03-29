@@ -35,6 +35,11 @@ class Commission_Structure(BaseEntity):
                 ),
             ]
         )
+
+    class Meta:
+        unique_together = ("staff", "service")
+
+        
     def __str__(self):
         return str(self.staff.name)+ '  '+ str(self.service.name)
 
@@ -165,6 +170,12 @@ class Invoice(BaseEntity):
             verbose_name='date payment is expected'
 
         )
+    paid_date = models.DateField(
+            verbose_name='date payment is expected',
+            blank =True,
+            null = True,
+
+        )
     status = models.CharField(
         max_length =15,
         choices = STATUS_CHOICES,
@@ -215,7 +226,7 @@ class Bill(BaseEntity):
         ('CREATED', 'Created'),
         ('CONFIRMED', 'Confirmed'),
         ('PARTIAL_PAYMENT', 'Partially Paid'),
-        ('RECEIVED', 'Received'),
+        ('PAID', 'Paid'),
         ('CLOSED', 'Closed')
     )
     vendor = models.ForeignKey(
@@ -227,10 +238,16 @@ class Bill(BaseEntity):
             related_name='billed_services',
         )
     generated_date = models.DateField(
-            verbose_name='date invoice generated'
+            verbose_name='date bill generated'
         )
     due_date = models.DateField(
-            verbose_name='date payment is expected'
+            verbose_name='date payout is expected'
+
+        )
+    paid_date = models.DateField(
+            verbose_name='date payout is made',
+            null = True,
+            blank = True,
 
         )
     status = models.CharField(
@@ -254,10 +271,11 @@ class Bill(BaseEntity):
         )
     paid = models.IntegerField(
             default=500,
+
             validators=[
                 MinValueValidator(
-                    10,
-                    message = 'Amount should be greater than 10'
+                    0,
+                    message = 'Amount should be greater than 0'
                 ),
 
                 MaxValueValidator(
@@ -268,17 +286,23 @@ class Bill(BaseEntity):
         )
     payouts = models.ManyToManyField(
             Payout,
-            related_name='billed_Payouts'
+            related_name='billed_Payouts',
+            null = True,
+            blank = True,
         )
 
+    @property
+    def due_amount(self):
+        return self.amount - self.paid
+
     def get_absolute_url(self):
-        return reverse('accounting:Bill_Detail', kwargs={'pk': self.id})
+        return reverse('accounting:Bill_Detail', kwargs={'id': self.id})
 
     def get_update_url(self):
-        return reverse('accounting:Bill_Update', kwargs={'pk': self.id})
+        return reverse('accounting:Bill_Update', kwargs={'id': self.id})
 
     def get_delete_url(self):
-        return reverse('accounting:Bill_Delete', kwargs={'pk': self.id})
+        return reverse('accounting:Bill_Delete', kwargs={'id': self.id})
 
 class Commission(BaseEntity):
     """ Commissions are generated based on events state"""

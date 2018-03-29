@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block title %}
+
+Bills
+
+{% endblock %}
+
+{% block content %}
+<div class="container">
+
+  <div class="row">
+    <div class="col-sm-12">
+
+      <h2>list of Bills</h2>
+      <br>
+      <hr>
+
+ <table class="table table-striped">
+  <thead>
+    <tr>
+      <th>#</th>
+      <th>Vendor</th>
+      <th>Service</th>
+      <th>Generated Date</th>
+      <th>Due Date</th>
+      <th>Paid Date</th>
+      <th>Status</th>
+      <th>Total Amount</th>
+      <th>Paid Amount</th>
+      <th>Due Amount<th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+  {% for b in bills %}
+    <tr>
+      <th scope="row">{{ forloop.counter }}</th>
+      <td> {{ b.vendor}}</td>
+      <td> {{ b.service}}</td>
+      <td>{{ b.generated_date }}</td>
+      <td>{{ b.due_date }}</td>
+      <td>{{ b.paid_date }}</td>
+      <td>{{ b.status }}</td>
+      <td>{{ b.amount }}</td>
+      <td>{{ b.paid }}</td>
+      <td>{{ b.due_amount }}</td>
+      <td><a href="{{ b.get_update_url }}"><button type="button" class="btn btn-primary" name="button">Edit</button></a></td>
+      <td><a href="{{ b.get_delete_url }}"><button type="button" class="btn btn-danger" name="button">Delete</button></a></td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+    </div>
+  </div>
+
+
+</div>
+{% endblock content %}

@@ -5,9 +5,11 @@ from django.contrib.auth.decorators import login_required, user_passes_test
 from django.core.urlresolvers import reverse
 from django.urls import reverse_lazy
 from django.db.models import F
+from django.views import generic
+from django.contrib.auth.mixins import UserPassesTestMixin,LoginRequiredMixin
 
-from .models import Payin, Invoice, Commission, PayCommissionOrSalary
-from .forms import PayinForm, PayCommissionOrSalaryForm, CommissionForm, InvoiceForm
+from .models import Payin, Invoice, Commission, PayCommissionOrSalary, Bill,Commission_Structure
+from .forms import PayinForm, PayCommissionOrSalaryForm, CommissionForm, InvoiceForm, BillForm
 from booking.models import Event
 
 
@@ -126,11 +128,7 @@ def Invoice_Index(request):
 	invoices = Invoice.objects.all().annotate(due_amount =F('amount') - F('paid'))
 	return render(request,'invoices/invoices_index.html', {'invoices':invoices})
 
-@login_required
-@user_passes_test(Permission_Check,redirect_field_name= None)
-def Commission_Index(request):
-	commissions = Commission.objects.all().annotate(due_amount =F('amount') - F('paid'))
-	return render(request, 'commissions/commissions_index.html', {'commissions': commissions})
+
 
 @login_required
 @user_passes_test(Permission_Check,redirect_field_name= None)
@@ -157,6 +155,12 @@ def Invoice_Delete(request,id):
 		form = InvoiceForm(instance = invoice)
 	return render(request, 'invoices/invoices_delte.html', {'form': form, 'id':id})
 
+
+@login_required
+@user_passes_test(Permission_Check,redirect_field_name= None)
+def Commission_Index(request):
+	commissions = Commission.objects.all().annotate(due_amount =F('amount') - F('paid'))
+	return render(request, 'commissions/commissions_index.html', {'commissions': commissions})
 
 @login_required
 @user_passes_test(Permission_Check,redirect_field_name= None)
@@ -195,3 +199,78 @@ def Commission_Delete(request,id):
 	else:
 		form = CommissionForm(instance = commission)
 	return render(request, 'commissions/commissions_delte.html', {'form': form, 'id':id})
+
+
+@login_required
+@user_passes_test(Permission_Check,redirect_field_name= None)
+def Bill_Index(request):
+	bills = Bill.objects.all()
+	return render(request, 'bills/bills_index.html', {'bills': bills})
+
+
+@login_required
+@user_passes_test(Permission_Check,redirect_field_name= None)
+def Bill_Update(request, id):
+	bill = get_object_or_404(Bill,pk=id)
+	form = BillForm(request.POST or None, instance = bill)
+	if form.is_valid():
+		form.save()
+		return HttpResponseRedirect(reverse('accounting:Bill_Index'))
+	return render(request, 'bills/bills_update.html', {'form':form, 'id':bill.id})
+
+@login_required
+@user_passes_test(Permission_Check,redirect_field_name= None)
+def Bill_Delete(request, id):
+	bill = get_object_or_404(Bill,pk=id)
+
+	if request.method == 'POST':
+		form = BillForm(request.POST or None, instance=bill)
+
+		if form.is_valid():
+			bill.delete()
+			return HttpResponseRedirect(reverse('accounting:Bill_Index'))
+	else:
+		form = BillForm(instance = bill)
+	return render(request, 'bills/bills_delte.html', {'form': form, 'id':id})
+
+
+class CommissionStructureIndexView(LoginRequiredMixin,UserPassesTestMixin,generic.ListView):
+    model = Commission_Structure
+    template_name = 'commission_structure/commission_structure_list.html'
+    context_object_name = 'commission_structure_list'
+    login_url = '/'
+
+    def test_func(self):
+        return  'accounting management' in [i.name for i in self.request.user.groups.all()]
+
+
+class CommissionStructureCreateView(LoginRequiredMixin, UserPassesTestMixin,generic.edit.CreateView):
+    model = Commission_Structure
+    fields = ['staff', 'service','amount']
+    template_name = 'commission_structure/commission_structure_add.html'
+    login_url = '/'
+
+    def test_func(self):
+        return  'accounting management' in [i.name for i in self.request.user.groups.all()]
+
+    def get_success_url(self):
+        return reverse('accounting:Commission_Structure_Index')
+
+
+class CommissionStructureUpdateView(LoginRequiredMixin,UserPassesTestMixin,generic.edit.UpdateView):
+    model = Commission_Structure
+    fields = ['staff', 'service','amount']
+    template_name = 'commission_structure/commission_structure_update.html'
+    login_url = '/'
+
+    def test_func(self):
+        return  'accounting management' in [i.name for i in self.request.user.groups.all()]
+
+class CommissionStructureDeleteView(LoginRequiredMixin,UserPassesTestMixin,generic.edit.DeleteView):
+    model = Commission_Structure
+    template_name = 'commission_structure/commission_structure_delete.html'
+    success_url = reverse_lazy('accounting:Commission_Structure_Index')
+    login_url = '/'
+
+    def test_func(self):
+        return  'accounting management' in [i.name for i in self.request.user.groups.all()]

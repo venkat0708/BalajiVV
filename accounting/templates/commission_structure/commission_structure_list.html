@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block title %}
+
+Commission Structure
+
+{% endblock %}
+
+{% block content %}
+<div class="container">
+
+  <div class="row">
+    <div class="col-sm-12">
+
+      <h2>Commission Structure list</h2>
+      <br>
+      <hr>
+
+ <table class="table table-striped">
+  <thead>
+    <tr>
+      <th>#</th>
+      <th>Staff</th>
+      <th>Service</th>
+      <th>Amount</th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+  {% for c in commission_structure_list %}
+    <tr>
+      <th scope="row">{{ forloop.counter }}</th>
+      <td> {{ c.staff}}</td>
+      <td> {{ c.service}}</td>
+      <td>{{ c.amount }}</td>
+      <td><a href="{{ c.get_update_url }}"><button type="button" class="btn btn-primary" name="button">Edit</button></a></td>
+      <td><a href="{{ c.get_delete_url }}"><button type="button" class="btn btn-danger" name="button">Delete</button></a></td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+    </div>
+  </div>
+
+
+</div>
+{% endblock content %}

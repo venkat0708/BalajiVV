@@ -319,6 +319,7 @@ def update_event_invoice_based_on_payin(sender,instance, created, **kwargs):
                     #print(invoice.paid)
                     if invoice.paid == invoice.amount:
                         invoice.status = 'PAID'
+                        invoice.paid_date = timezone.now().date()
                         invoice.event = event
                         invoice.save()
 
@@ -341,11 +342,13 @@ def update_event_invoice_based_on_payin(sender,instance, created, **kwargs):
                 #print(invoice.paid)
                 if invoice.paid == invoice.amount:
                     invoice.status = 'PAID'
+                    invoice.paid_date = timezone.now().date()
                     invoice.save()
                     #print('post_save after save in paid in update :',invoice.paid)
                     #print('paid')
                 else:
                     invoice.status = 'PARTIAL_PAYMENT'
+                    invoice.paid_date = null
                     invoice.save()
                     #print('post_save after save in partial payment in update :',invoice.paid)
                     #print('partial payment')

@@ -5,7 +5,7 @@
 
 {% block title %}
 
-Delete Invoice
+Update Bill
 
 {% endblock %}
 
@@ -15,15 +15,17 @@ Delete Invoice
   <div class="row">
     <div class="col-sm-12">
 
-      <h2>Delete Invoice</h2>
-     <form action="{% url 'accounting:Invoice_Delete' id %}"method="POST">
+      <h2>Update Bill</h2>
+     <form action="{% url 'accounting:Bill_Update' id %}"method="POST">
     	{% csrf_token %}
     	{% crispy form %}
-    	<input type="submit" value="Delete" class="btn btn-danger">
+    	<input type="submit" value="Submit" class="btn btn-primary">
     	<a href="{{ request.META.HTTP_REFERER }}"><button type="button" class="btn btn-secondary">Cancel</button></a>
 	</form>
 
     </div>
+  </div>
+
 
 </div>
 {% endblock content %}
