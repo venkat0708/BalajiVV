@@ -7,7 +7,7 @@ from django.urls import reverse_lazy
 from django.db.models import F
 
 from .models import Payin, Invoice, Commission, PayCommissionOrSalary
-from .forms import PayinForm, PayCommissionOrSalaryForm
+from .forms import PayinForm, PayCommissionOrSalaryForm, CommissionForm
 from booking.models import Event
 
 
@@ -119,10 +119,53 @@ def PayCommissionOrSalary_Delete(request,id):
 		form = PayCommissionOrSalaryForm(instance = payout)
 	return render(request, 'payouts_commission/Payout_Commission_Delete.html', {'form': form, 'id':id})
 
+
+@login_required
+@user_passes_test(Permission_Check,redirect_field_name= None)
 def Invoice_Index(request):
 	invoices = Invoice.objects.all().annotate(due_amount =F('amount') - F('paid'))
 	return render(request,'commissions/invoices_index.html', {'invoices':invoices})
 
+@login_required
+@user_passes_test(Permission_Check,redirect_field_name= None)
 def Commission_Index(request):
 	commissions = Commission.objects.all().annotate(due_amount =F('amount') - F('paid'))
 	return render(request, 'commissions/commissions_index.html', {'commissions': commissions})
+
+@login_required
+@user_passes_test(Permission_Check,redirect_field_name= None)
+def Commission_Add(request):
+	if request.method == 'POST':
+		form = CommissionForm(request.POST)
+		if form.is_valid():
+			form.save()
+			return HttpResponseRedirect(reverse('accounting:Commission_Index'))
+	else:
+		form = CommissionForm()
+	return render(request, 'commissions/commissions_add.html',{'form':form})
+
+@login_required
+@user_passes_test(Permission_Check,redirect_field_name= None)
+def Commission_Update(request, id):
+	commission = get_object_or_404(Commission,pk=id)
+	form = CommissionForm(request.POST or None, instance = commission)
+	if form.is_valid():
+		form.save()
+		return HttpResponseRedirect(reverse('accounting:Commission_Index'))
+	return render(request, 'commissions/commissions_update.html', {'form':form, 'id':commission.id})
+
+
+@login_required
+@user_passes_test(Permission_Check,redirect_field_name= None)
+def Commission_Delete(request,id):
+	commission = get_object_or_404(Commission,pk=id)
+
+	if request.method == 'POST':
+		form = CommissionForm(request.POST or None, instance=commission)
+
+		if form.is_valid():
+			commission.delete()
+			return HttpResponseRedirect(reverse('accounting:Commission_Index'))
+	else:
+		form = CommissionForm(instance = commission)
+	return render(request, 'commissions/commissions_delte.html', {'form': form, 'id':id})

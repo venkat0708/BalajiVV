@@ -72,4 +72,23 @@ urlpatterns = [
         name = 'Commission_Index'
         ),
 
+    url(
+        regex=r'commissions/add/$',
+        view=views.Commission_Add,
+        name = 'Commission_Add'
+        ),
+
+    url(
+        regex=r'commissions/update/(?P<id>[\d]+)/$',
+        view=views.Commission_Update,
+        name = 'Commission_Update'
+        ),
+
+    url(
+        regex=r'commissions/delete/(?P<id>[\d]+)/$',
+        view=views.Commission_Delete,
+        name = 'Commission_Delete'
+        ),
+
+
 ]

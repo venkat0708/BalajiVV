@@ -353,13 +353,13 @@ class Commission(BaseEntity):
 
 
     def get_absolute_url(self):
-        return reverse('accounting:Commission_Detail', kwargs={'pk': self.id})
+        return reverse('accounting:Commission_Detail', kwargs={'id': self.id})
 
     def get_update_url(self):
-        return reverse('accounting:Commission_Update', kwargs={'pk': self.id})
+        return reverse('accounting:Commission_Update', kwargs={'id': self.id})
 
     def get_delete_url(self):
-        return reverse('accounting:Commission_Delete', kwargs={'pk': self.id})
+        return reverse('accounting:Commission_Delete', kwargs={'id': self.id})
 
 
 class Payin(BaseEntity):

@@ -15,7 +15,9 @@ Commissions
     <div class="col-sm-12">
 
       <h2>list of Commissions</h2>
-
+      <br>
+      <a href="{% url 'accounting:Commission_Add' %}"><button type="button" class="btn btn-primary">Add Commission</button></a>
+      <hr/>
 
  <table class="table table-striped">
   <thead>
@@ -28,6 +30,8 @@ Commissions
       <th>Total Amount</th>
       <th>Paid Amount</th>
       <th>Due Amount<th>
+      <th></th>
+      <th></th>
     </tr>
   </thead>
   <tbody>
@@ -41,6 +45,8 @@ Commissions
       <td>{{ i.amount }}</td>
       <td>{{ i.paid }}</td>
       <td>{{ i.due_amount }}</td>
+      <td><a href="{{ i.get_update_url }}"><button type="button" class="btn btn-primary" name="button">Edit</button></a></td>
+      <td><a href="{{ i.get_delete_url }}"><button type="button" class="btn btn-danger" name="button">Delete</button></a></td>
     </tr>
     {% endfor %}
   </tbody>

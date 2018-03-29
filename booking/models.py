@@ -182,7 +182,7 @@ class Booked_Service(BaseEntity):
             null = True,
         )
     def __str__(self):
-        return self.event.__str__()
+        return self.service.__str__()
 
     def get_absolute_url(self):
         return reverse('booking:Booked_Service_Detail', kwargs={'pk': self.id})
