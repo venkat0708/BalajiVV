@@ -7,7 +7,7 @@ from django.urls import reverse_lazy
 from django.db.models import F
 
 from .models import Payin, Invoice, Commission, PayCommissionOrSalary
-from .forms import PayinForm, PayCommissionOrSalaryForm, CommissionForm
+from .forms import PayinForm, PayCommissionOrSalaryForm, CommissionForm, InvoiceForm
 from booking.models import Event
 
 
@@ -124,13 +124,39 @@ def PayCommissionOrSalary_Delete(request,id):
 @user_passes_test(Permission_Check,redirect_field_name= None)
 def Invoice_Index(request):
 	invoices = Invoice.objects.all().annotate(due_amount =F('amount') - F('paid'))
-	return render(request,'commissions/invoices_index.html', {'invoices':invoices})
+	return render(request,'invoices/invoices_index.html', {'invoices':invoices})
 
 @login_required
 @user_passes_test(Permission_Check,redirect_field_name= None)
 def Commission_Index(request):
 	commissions = Commission.objects.all().annotate(due_amount =F('amount') - F('paid'))
 	return render(request, 'commissions/commissions_index.html', {'commissions': commissions})
+
+@login_required
+@user_passes_test(Permission_Check,redirect_field_name= None)
+def Invoice_Update(request, id):
+	invoice = get_object_or_404(Invoice,pk=id)
+	form = InvoiceForm(request.POST or None, instance = invoice)
+	if form.is_valid():
+		form.save()
+		return HttpResponseRedirect(reverse('accounting:Invoice_Index'))
+	return render(request, 'invoices/invoicess_update.html', {'form':form, 'id':invoice.id})
+
+@login_required
+@user_passes_test(Permission_Check,redirect_field_name= None)
+def Invoice_Delete(request,id):
+	invoice = get_object_or_404(Invoice,pk=id)
+
+	if request.method == 'POST':
+		form = InvoiceForm(request.POST or None, instance=invoice)
+
+		if form.is_valid():
+			invoice.delete()
+			return HttpResponseRedirect(reverse('accounting:Invoice_Index'))
+	else:
+		form = InvoiceForm(instance = invoice)
+	return render(request, 'invoices/invoices_delte.html', {'form': form, 'id':id})
+
 
 @login_required
 @user_passes_test(Permission_Check,redirect_field_name= None)

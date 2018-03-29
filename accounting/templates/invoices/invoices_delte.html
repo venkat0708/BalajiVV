@@ -5,7 +5,7 @@
 
 {% block title %}
 
-Delete Commission
+Delete Invoice
 
 {% endblock %}
 
@@ -15,8 +15,8 @@ Delete Commission
   <div class="row">
     <div class="col-sm-12">
 
-      <h2>Delete Commission</h2>
-     <form action="{% url 'accounting:Commission_Delete' id %}"method="POST">
+      <h2>Delete Inv'</h2>
+     <form action="{% url 'accounting:Invoice_Delete' id %}"method="POST">
     	{% csrf_token %}
     	{% crispy form %}
     	<input type="submit" value="Delete" class="btn btn-danger">

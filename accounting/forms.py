@@ -3,7 +3,7 @@ from django.db.models import Q
 
 from crispy_forms.helper import FormHelper
 
-from .models import Payin, PayCommissionOrSalary, Commission
+from .models import Payin, PayCommissionOrSalary, Commission, Invoice
 from booking.models import Event
 
 class DateInput(forms.DateInput):
@@ -60,4 +60,23 @@ class CommissionForm(forms.ModelForm):
 
 	def __init__(self, *args, **kwargs):
 		super(CommissionForm, self).__init__(*args, **kwargs)
+		self.fields['event'].queryset = Event.objects.filter(status = 'COMPLETED')
+
+class InvoiceForm(forms.ModelForm):
+	""" form for Invoice"""
+
+	helper = FormHelper()
+	helper.form_tag = False
+	helper.form_style = 'inline'
+
+	class Meta:
+		model = Invoice
+		exclude = ['']
+		widgets = {
+			'generated_date':DateInput(),
+			'due_date':DateInput(),
+		}
+
+	def __init__(self, *args, **kwargs):
+		super(InvoiceForm, self).__init__(*args, **kwargs)
 		self.fields['event'].queryset = Event.objects.filter(status = 'COMPLETED')

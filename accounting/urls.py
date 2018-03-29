@@ -66,6 +66,18 @@ urlpatterns = [
         view=views.Invoice_Index,
         name = 'Invoice_Index'
         ),
+
+    url(
+        regex=r'invoices/update/(?P<id>[\d]+)/$',
+        view=views.Invoice_Update,
+        name = 'Invoice_Update'
+        ),
+
+    url(
+        regex=r'invoices/delete/(?P<id>[\d]+)/$',
+        view=views.Invoice_Delete,
+        name = 'Invoice_Delete'
+        ),
     url(
         regex=r'commissions/$',
         view=views.Commission_Index,

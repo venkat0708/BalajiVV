@@ -200,13 +200,13 @@ class Invoice(BaseEntity):
         )
 
     def get_absolute_url(self):
-        return reverse('accounting:Invoice_Detail', kwargs={'pk': self.id})
+        return reverse('accounting:Invoice_Detail', kwargs={'id': self.id})
 
     def get_update_url(self):
-        return reverse('accounting:Invoice_Update', kwargs={'pk': self.id})
+        return reverse('accounting:Invoice_Update', kwargs={'id': self.id})
 
     def get_delete_url(self):
-        return reverse('accounting:Invoice_Delete', kwargs={'pk': self.id})
+        return reverse('accounting:Invoice_Delete', kwargs={'id': self.id})
 
 class Bill(BaseEntity):
     """ Invoices are generated based on events state"""
