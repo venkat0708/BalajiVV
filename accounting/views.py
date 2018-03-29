@@ -8,6 +8,7 @@ from django.db.models import F
 
 from .models import Payin, Invoice, Commission, PayCommissionOrSalary
 from .forms import PayinForm, PayCommissionOrSalaryForm
+from booking.models import Event
 
 
 def Permission_Check(user):
@@ -27,6 +28,10 @@ def Payin_Add(request):
 		form = PayinForm(request.POST)
 		if form.is_valid():
 			payin = form.save()
+			event = Event.objects.get(pk = payin.event.id )
+			if event.status != 'COMPLETED':
+				event.advance = event.advance + payin.amount
+				event.save()
 			return HttpResponseRedirect(reverse('booking:Event_Detail', kwargs={'pk':payin.event.id}))
 	else:
 		form = PayinForm()

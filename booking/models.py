@@ -197,8 +197,18 @@ class Booked_Service(BaseEntity):
 #signals
 
 @receiver(post_save, sender=Event)
-def generate_or_modify_invoice_and_bills_based_on_event_state(sender, **kwargs):
-    event = kwargs.get('instance')
+def generate_or_modify_invoice_and_bills_based_on_event_state(sender,instance, created, **kwargs):
+    event = instance
+    if created:
+        payin = Payin(
+                event = event,
+                customer = event.customer,
+                amount= event.advance,
+                date = timezone.now().date(),
+                time = timezone.now().time(),
+                mode = 'CASH'
+            )
+        payin.save()
     booked_services = event.services_booked.all()
     if event.status == 'COMPLETED':
         amount = 0
@@ -279,6 +289,21 @@ def generate_or_modify_invoice_and_bills_based_on_event_state(sender, **kwargs):
                 bill.delete()
             except:
                 pass
+        try:
+            payins = event.event_payins.all().order_by('id')
+            advance = 0
+            for p in payins:
+                advance = advance + p.amount
+                if event.advance >= advance:
+                    continue
+                else:
+                    p.delete()
+        except:
+            print('fail')
+
+
+
+
 @receiver(post_save, sender = Payin)
 def update_event_invoice_based_on_payin(sender,instance, created, **kwargs):
     payin = instance
@@ -286,12 +311,7 @@ def update_event_invoice_based_on_payin(sender,instance, created, **kwargs):
     if created:
         try:
             event = Event.objects.get(pk = payin.event.id )
-            if event.status != 'COMPLETED':
-                print('advance before save in post_save in create is: ', event.advance)
-                event.advance = event.advance + payin.amount
-                event.save()
-                print('advance after save in post_save in create is: ' , event.advance)
-            else:
+            if event.status == 'COMPLETED':
                 invoice = Invoice.objects.get(event = event.id)
                 if invoice.paid + payin.amount <= invoice.amount:
                     #print('post_save before save :',invoice.paid )
@@ -312,12 +332,7 @@ def update_event_invoice_based_on_payin(sender,instance, created, **kwargs):
             pass
     else:
         event = Event.objects.get(pk = payin.event.id )
-        if event.status != 'COMPLETED':
-            #print('advance before save in post_save in modify is: ' ,event.advance)
-            event.advance = event.advance + payin.amount
-            event.save()
-            #print('advance after save in post_save in modify is: ' , event.advance)
-        else:
+        if event.status == 'COMPLETED':
             invoice = Invoice.objects.get(event = event.id)
             if invoice.paid + payin.amount <= invoice.amount:
                 #print(invoice.paid + payin.amount)

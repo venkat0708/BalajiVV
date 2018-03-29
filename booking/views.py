@@ -38,7 +38,10 @@ class EventDetailView(LoginRequiredMixin,UserPassesTestMixin,generic.DetailView)
         context = super().get_context_data(**kwargs)
         # add booked service form
         bsf = Booked_Service_Form(initial = {'event':self.object})
-        amt= self.object.invoice.all()[0].amount - self.object.invoice.all()[0].paid
+        try:
+            amt= self.object.invoice.all()[0].amount - self.object.invoice.all()[0].paid
+        except:
+            amt = 0
         pf = PayinForm(initial = {
                 'event':self.object,
                 'customer':self.object.customer,
