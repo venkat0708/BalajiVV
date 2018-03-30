@@ -126,8 +126,8 @@ def Booked_Service_Update(request,id):
 	booked_service = get_object_or_404(Booked_Service,pk=id)
 	form = Booked_Service_Form(request.POST or None,instance = booked_service)
 	if form.is_valid():
-		form.save()
-		return HttpResponseRedirect(reverse('booking:Booked_Service_Index'))
+		service = form.save()
+		return HttpResponseRedirect(reverse('booking:Event_Detail', kwargs={'pk':service.event.id}))
 	return render(request, 'booked_services/booked_services_update.html',{'form':form, 'id':booked_service.id})
 
 @login_required

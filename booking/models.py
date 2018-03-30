@@ -241,7 +241,8 @@ def generate_or_modify_invoice_and_bills_based_on_event_state(sender,instance, c
                     commission.event = event
                     commission.generated_date = timezone.now().date()
                     commission.due_date = timezone.now().date()
-                    commission.amount = 500
+                    if commission.amount < CommissionStructure.objects.get(staff = s.id, service = b.service.id).amount:
+                        commission.amount = CommissionStructure.objects.get(staff = s.id, service = b.service.id).amount
                     commission.save()
                 except:
                     try:

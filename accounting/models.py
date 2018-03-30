@@ -3,7 +3,8 @@ from django.db import models
 from django.core.validators import RegexValidator, MinValueValidator,MaxValueValidator
 from django.core.urlresolvers import reverse
 from django.dispatch import receiver
-from django.db.models.signals import post_save, pre_save
+from django.db.models.signals import post_save, pre_save, pre_delete
+from django.utils import timezone
 
 
 from core.models import BaseEntity
@@ -91,6 +92,9 @@ class Payout(BaseEntity):
         choices = MODE_CHOICES,
         default = 'CASH',
     )
+
+    def __str__(self):
+        return self.vendor.name
 
     def get_absolute_url(self):
         return reverse('accounting:Payout_Detail', kwargs={'id': self.id})
@@ -290,7 +294,7 @@ class Bill(BaseEntity):
         )
     payouts = models.ManyToManyField(
             Payout,
-            related_name='billed_Payouts',
+            related_name='bills',
             null = True,
             blank = True,
         )
@@ -298,6 +302,9 @@ class Bill(BaseEntity):
     @property
     def due_amount(self):
         return self.amount - self.paid
+
+    def __str__(self):
+        return self.vendor.name
 
     def get_absolute_url(self):
         return reverse('accounting:Bill_Detail', kwargs={'id': self.id})
@@ -465,3 +472,77 @@ def update_commissions_salaries_based_on_PayCommissionOrSalary_post_save(sender,
                 commission.status = 'PARTIAL_PAYMENT'
                 amount -= commission.paid
                 commission.save()
+
+
+@receiver(post_save, sender = Payout)
+def update_bill_based_on_payout_post_save(sender, instance, created, **kwargs):
+    print('triggered post save payout')
+    payout = instance
+    amount = payout.amount
+    bills = Bill.objects.filter(vendor = payout.vendor).order_by('generated_date')
+    for bill in bills:
+        if bill.paid < bill.amount:
+            if amount >= bill.amount:
+                bill.paid = bill.amount
+                bill.status = 'PAID'
+                amount -= bill.amount
+                bill.paid_date = timezone.now().date()
+                bill.payouts.add(payout)
+                bill.save()
+            elif amount > 0:
+                bill.paid += amount
+                if bill.paid < bill.amount:
+                    bill.status = 'PARTIAL_PAYMENT'
+                else:
+                    bill.status = 'PAID'
+                    bill.paid_date = timezone.now().date()
+                amount -= bill.paid
+                bill.payouts.add(payout)
+                bill.save()
+
+@receiver(pre_save, sender = Payout)
+def update_bill_based_on_payout_pre_save(sender, instance, **kwargs):
+    print('triggered pre save payout')
+    payout = instance
+    try:
+        past_payout = Payout.objects.get(pk = payout.id)
+        amount = past_payout.amount
+        bills = past_payout.bills.all()
+        for bill in bills:
+            if amount >0:
+                if bill.paid < amount:
+                    bill.paid = 0
+                    bill.status = 'CONFIRMED'
+                    bill.save()
+                    amount -= bill.paid
+                elif bill.paid > amount:
+                    bill.paid -= amount
+                    bill.status = 'PARTIAL_PAYMENT'
+                    bill.save()
+                    amount -= bill.paid
+    except:
+        pass
+
+
+@receiver(pre_delete, sender = Payout)
+def update_bill_based_on_payout_pre_save(sender, instance, **kwargs):
+    print('triggered pre delete payout' )
+    payout = instance
+    try:
+        delted_payout = Payout.objects.get(pk = payout.id)
+        amount = delted_payout.amount
+        bills = delted_payout.bills.all()
+        for bill in bills:
+            if amount >0:
+                if bill.paid < amount:
+                    bill.paid = 0
+                    bill.status = 'CONFIRMED'
+                    bill.save()
+                    amount -= bill.paid
+                elif bill.paid > amount:
+                    bill.paid -= amount
+                    bill.status = 'PARTIAL_PAYMENT'
+                    bill.save()
+                    amount -= bill.paid
+    except:
+        pass
