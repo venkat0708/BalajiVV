@@ -11,7 +11,7 @@ from django.utils import timezone
 from core.models import BaseEntity
 from customers.models import Customer,Vendor, Staff
 from products.models import Service
-from accounting.models import Invoice, Bill, Commission, Payin
+from accounting.models import Invoice, Bill, Commission, Payin, CommissionStructure
 
 class Event(BaseEntity):
 
@@ -199,6 +199,7 @@ class Booked_Service(BaseEntity):
 @receiver(post_save, sender=Event)
 def generate_or_modify_invoice_and_bills_based_on_event_state(sender,instance, created, **kwargs):
     event = instance
+    commission_amount = 0
     if created:
         payin = Payin(
                 event = event,
@@ -243,11 +244,16 @@ def generate_or_modify_invoice_and_bills_based_on_event_state(sender,instance, c
                     commission.amount = 500
                     commission.save()
                 except:
+                    try:
+                        if commission_amount < CommissionStructure.objects.get(staff = s.id, service = b.service.id).amount:
+                            commission_amount = CommissionStructure.objects.get(staff = s.id, service = b.service.id).amount
+                    except:
+                        commission_amount = 500
                     commission = Commission(
                             staff = s,
                             booked_service = b,
                             event = event,
-                            amount = 500,
+                            amount = commission_amount,
                             generated_date = timezone.now().date(),
                             paid = 0,
                             due_date = timezone.now().date(),
