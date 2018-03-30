@@ -3,7 +3,7 @@ from django.db.models import Q
 
 from crispy_forms.helper import FormHelper
 
-from .models import Payin, PayCommissionOrSalary, Commission, Invoice, Bill, CommissionStructure
+from .models import Payin, PayCommissionOrSalary, Commission, Invoice, Bill, CommissionStructure, Payout
 from booking.models import Event
 
 class DateInput(forms.DateInput):
@@ -110,3 +110,17 @@ class CommissionStructureForm(forms.ModelForm):
 	class Meta:
 		model = CommissionStructure
 		exclude = ['']
+
+
+class PayoutForm(forms.ModelForm):
+    """ form for payins"""
+    helper = FormHelper()
+    helper.form_tag = False
+    helper.form_style = 'inline'
+
+    class Meta:
+        model = Payout
+        exclude = ['']
+        widgets = {
+			'date' : DateInput(),
+		}

@@ -61,6 +61,10 @@ class Payout(BaseEntity):
         ('DD', 'Demand Draft'),
         ('CASH', 'Cash'),
     )
+    vendor = models.ForeignKey(
+            Vendor,
+            related_name='bill_payouts'
+        )
     date = models.DateField(
             verbose_name='payment date'
         )
@@ -89,13 +93,13 @@ class Payout(BaseEntity):
     )
 
     def get_absolute_url(self):
-        return reverse('accounting:Payout_Detail', kwargs={'pk': self.id})
+        return reverse('accounting:Payout_Detail', kwargs={'id': self.id})
 
     def get_update_url(self):
-        return reverse('accounting:Payout_Update', kwargs={'pk': self.id})
+        return reverse('accounting:Payout_Update', kwargs={'id': self.id})
 
     def get_delete_url(self):
-        return reverse('accounting:Payout_Delete', kwargs={'pk': self.id})
+        return reverse('accounting:Payout_Delete', kwargs={'id': self.id})
 
 class PayCommissionOrSalary(BaseEntity):
     """ Payout to all staff members"""

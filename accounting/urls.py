@@ -33,6 +33,35 @@ urlpatterns = [
     ),
 
     url(
+        regex=r'^payouts/$',
+        view=views.Payouts_Index,
+        name='Payout_Index'
+    ),
+
+    url(
+        regex=r'^payouts/(?P<id>[0-9]+)/$',
+        view=views.Payout_Detail,
+        name='Payout_Detail'
+        ),
+    url(
+      regex=r'^payouts/add/$',
+      view = views.Payout_Add,
+      name = 'Payout_Add'
+    ),
+
+    url(
+      regex=r'^payouts/update/(?P<id>[\d]+)/$',
+      view = views.Payout_Update,
+      name = 'Payout_Update'
+    ),
+
+    url(
+      regex=r'^payouts/delete/(?P<id>[\d]+)/$',
+      view = views.Payout_Delete,
+      name = 'Payout_Delete'
+    ),
+
+    url(
         regex=r'^commissionPayOuts/$',
         view=views.PayCommissionOrSalary_Index,
         name='PayCommissionOrSalary_Index'

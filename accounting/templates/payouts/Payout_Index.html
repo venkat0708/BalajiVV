@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block title %}
+
+Payouts
+
+{% endblock %}
+
+{% block content %}
+<div class="container">
+
+  <div class="row">
+    <div class="col-sm-12">
+
+      <h2>Payouts list</h2>
+      <br/>
+      <a href="{% url 'accounting:Payout_Add' %}"><button type="button" class="btn btn-primary">Add Payout</button></a>
+      <hr/>
+
+ {% if payouts_list %}
+ <table class="table table-striped">
+  <thead>
+    <tr>
+      <th>#</th>
+      <th>Vendor</th>
+      <th>Date</th>
+      <th>Time</th>
+      <th>Amount</th>
+      <th>Mode</th>
+      <th></th>
+      <th></th>
+
+    </tr>
+  </thead>
+  <tbody>
+  {% for p in payouts_list %}
+    <tr>
+      <th scope="row">{{ forloop.counter }}</th>
+      <td><a href="{{ p.get_absolute_url }}">{{ p.vendor }}</a></td>
+      <td>{{ p.date }}</td>
+      <td>{{ p.time }}</td>
+      <td>{{ p.amount }}</td>
+      <td>{{ p.mode }}</td>
+      <td><a href="{{ p.get_update_url }}"><button type="button" name="button" class="btn btn-primary">Edit</button></a></td>
+      <td><a href="{{ p.get_delete_url }}"><button type="button" name="button" class="btn btn-danger">Delete</button></a></td>
+    {% endfor %}
+  </tbody>
+</table>
+
+{% else %}
+<h3>No Payouts yet, Would you like to add one </h3>
+{% endif %}
+    </div>
+  </div>
+
+
+</div>
+{% endblock content %}

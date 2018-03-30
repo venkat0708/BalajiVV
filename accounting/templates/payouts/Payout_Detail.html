@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block title %}
+
+Payout
+
+{% endblock %}
+
+{% block content %}
+<div class="container">
+
+  <div class="row">
+    <div class="col-sm-12">
+
+      <h2>{{payout.vendor}}</h2>
+      <a href="{% url 'accounting:Payout_Update' payout.id %}"><button class="btn btn-primary">Update</button></a>
+      <a href="{% url 'accounting:Payout_Delete' payout.id %}"><button class="btn btn-danger">Delete</button></a>
+    </div>
+  </div>
+
+
+</div>
+{% endblock content %}

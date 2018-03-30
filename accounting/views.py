@@ -8,8 +8,8 @@ from django.db.models import F
 from django.views import generic
 from django.contrib.auth.mixins import UserPassesTestMixin,LoginRequiredMixin
 
-from .models import Payin, Invoice, Commission, PayCommissionOrSalary, Bill,CommissionStructure
-from .forms import PayinForm, PayCommissionOrSalaryForm, CommissionForm, InvoiceForm, BillForm
+from .models import Payin, Invoice, Commission, PayCommissionOrSalary, Bill,CommissionStructure, Payout
+from .forms import PayinForm, PayCommissionOrSalaryForm, CommissionForm, InvoiceForm, BillForm, PayoutForm
 from booking.models import Event
 
 
@@ -274,3 +274,53 @@ class CommissionStructureDeleteView(LoginRequiredMixin,UserPassesTestMixin,gener
 
     def test_func(self):
         return  'accounting management' in [i.name for i in self.request.user.groups.all()]
+
+@login_required
+@user_passes_test(Permission_Check,redirect_field_name= None)
+def Payouts_Index(request):
+    payouts = Payout.objects.all()
+    return render(request,'payouts/Payout_Index.html', {'payouts_list':payouts})
+
+@login_required
+@user_passes_test(Permission_Check,redirect_field_name= None)
+def Payout_Add(request):
+	if request.method == 'POST':
+		form = PayoutForm(request.POST)
+		if form.is_valid():
+			payout = form.save()
+			return HttpResponseRedirect(reverse('accounting:Payout_Index'))
+	else:
+		form = PayoutForm()
+	return render(request, 'payouts/Payout_Add.html',{'form':form})
+
+@login_required
+@user_passes_test(Permission_Check,redirect_field_name= None)
+def Payout_Update(request,id):
+	payout = get_object_or_404(Payout,pk=id)
+	form = PayoutForm(request.POST or None,instance = payout)
+	if form.is_valid():
+		form.save()
+		return HttpResponseRedirect(reverse('accounting:Payout_Index'))
+	return render(request, 'payouts/Payout_Update.html',{'form':form, 'id':payout.id})
+
+
+@login_required
+@user_passes_test(Permission_Check,redirect_field_name= None)
+def Payout_Detail(request, id):
+	payout = get_object_or_404(Payout,pk=id)
+	return render(request, 'payouts/Payout_Detail.html', {'payout': payout})
+
+@login_required
+@user_passes_test(Permission_Check,redirect_field_name= None)
+def Payout_Delete(request,id):
+	payout = get_object_or_404(Payout,pk=id)
+
+	if request.method == 'POST':
+		form = PayoutForm(request.POST or None, instance=payout)
+
+		if form.is_valid():
+			payout.delete()
+			return HttpResponseRedirect(reverse('accounting:Payout_Index'))
+	else:
+		form = PayoutForm(instance = payout)
+	return render(request, 'payouts/Payout_Delete.html', {'form': form, 'id':id})
