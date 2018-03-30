@@ -16,7 +16,7 @@ Add Commission Structure
     <div class="col-sm-12">
 
       <h2>Add Commission Structure</h2>
-     <form class="form-horizontal" method="post" action="{% url 'accounting:Commission_Structure_Add' %}">
+     <form class="form-horizontal" method="post" action="{% url 'accounting:CommissionStructure_Add' %}">
     	{% csrf_token %}
     	{{ form|crispy }}
     	<div class="control-group">

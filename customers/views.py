@@ -10,6 +10,7 @@ from django.contrib.auth.mixins import UserPassesTestMixin,LoginRequiredMixin
 
 from .models import Customer, Vendor, Staff
 from .forms import CustomerForm, VendorForm
+from accounting.forms import CommissionStructureForm
 # Create your views here.
 
 
@@ -134,6 +135,12 @@ class StaffDetailView(LoginRequiredMixin,UserPassesTestMixin,generic.DetailView)
 
     def test_func(self):
         return  'staff management' in [i.name for i in self.request.user.groups.all()]
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        csf = CommissionStructureForm(initial = {'staff':self.object})
+        context['CSF'] = csf
+        return context
 
 
 class StaffCreateView(LoginRequiredMixin, UserPassesTestMixin,generic.edit.CreateView):

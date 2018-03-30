@@ -8,7 +8,7 @@ from django.db.models import F
 from django.views import generic
 from django.contrib.auth.mixins import UserPassesTestMixin,LoginRequiredMixin
 
-from .models import Payin, Invoice, Commission, PayCommissionOrSalary, Bill,Commission_Structure
+from .models import Payin, Invoice, Commission, PayCommissionOrSalary, Bill,CommissionStructure
 from .forms import PayinForm, PayCommissionOrSalaryForm, CommissionForm, InvoiceForm, BillForm
 from booking.models import Event
 
@@ -235,9 +235,9 @@ def Bill_Delete(request, id):
 
 
 class CommissionStructureIndexView(LoginRequiredMixin,UserPassesTestMixin,generic.ListView):
-    model = Commission_Structure
-    template_name = 'commission_structure/commission_structure_list.html'
-    context_object_name = 'commission_structure_list'
+    model = CommissionStructure
+    template_name = 'CommissionStructure/CommissionStructure_list.html'
+    context_object_name = 'CommissionStructure_list'
     login_url = '/'
 
     def test_func(self):
@@ -245,31 +245,31 @@ class CommissionStructureIndexView(LoginRequiredMixin,UserPassesTestMixin,generi
 
 
 class CommissionStructureCreateView(LoginRequiredMixin, UserPassesTestMixin,generic.edit.CreateView):
-    model = Commission_Structure
+    model = CommissionStructure
     fields = ['staff', 'service','amount']
-    template_name = 'commission_structure/commission_structure_add.html'
+    template_name = 'CommissionStructure/CommissionStructure_add.html'
     login_url = '/'
 
     def test_func(self):
         return  'accounting management' in [i.name for i in self.request.user.groups.all()]
 
     def get_success_url(self):
-        return reverse('accounting:Commission_Structure_Index')
+        return reverse('customers:Staff_Detail', kwargs={'pk':self.object.staff.id})
 
 
 class CommissionStructureUpdateView(LoginRequiredMixin,UserPassesTestMixin,generic.edit.UpdateView):
-    model = Commission_Structure
+    model = CommissionStructure
     fields = ['staff', 'service','amount']
-    template_name = 'commission_structure/commission_structure_update.html'
+    template_name = 'CommissionStructure/CommissionStructure_update.html'
     login_url = '/'
 
     def test_func(self):
         return  'accounting management' in [i.name for i in self.request.user.groups.all()]
 
 class CommissionStructureDeleteView(LoginRequiredMixin,UserPassesTestMixin,generic.edit.DeleteView):
-    model = Commission_Structure
-    template_name = 'commission_structure/commission_structure_delete.html'
-    success_url = reverse_lazy('accounting:Commission_Structure_Index')
+    model = CommissionStructure
+    template_name = 'CommissionStructure/CommissionStructure_delete.html'
+    success_url = reverse_lazy('accounting:CommissionStructure_Index')
     login_url = '/'
 
     def test_func(self):

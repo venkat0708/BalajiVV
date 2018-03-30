@@ -123,25 +123,25 @@ urlpatterns = [
     url(
         regex=r'^commissionStructure/$',
         view=views.CommissionStructureIndexView.as_view(),
-        name='Commission_Structure_Index'
+        name='CommissionStructure_Index'
     ),
 
     url(
       regex=r'^commissionStructure/add/$',
       view = views.CommissionStructureCreateView.as_view(),
-      name = 'Commission_Structure_Add'
+      name = 'CommissionStructure_Add'
     ),
 
     url(
       regex=r'^commissionStructure/update/(?P<pk>[\d]+)/$',
       view = views.CommissionStructureUpdateView.as_view(),
-      name = 'Commission_Structure_Update'
+      name = 'CommissionStructure_Update'
     ),
 
     url(
       regex=r'^commissionStructure/delete/(?P<pk>[\d]+)/$',
       view = views.CommissionStructureDeleteView.as_view(),
-      name = 'Commission_Structure_Delete'
+      name = 'CommissionStructure_Delete'
     ),
 
 

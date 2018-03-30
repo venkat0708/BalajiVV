@@ -10,7 +10,7 @@ from core.models import BaseEntity
 from products.models import Service
 from customers.models import Staff, Customer, Vendor
 
-class Commission_Structure(BaseEntity):
+class CommissionStructure(BaseEntity):
     """ commission for staff based on services"""
 
     staff = models.ForeignKey(
@@ -39,18 +39,18 @@ class Commission_Structure(BaseEntity):
     class Meta:
         unique_together = ("staff", "service")
 
-        
+
     def __str__(self):
         return str(self.staff.name)+ '  '+ str(self.service.name)
 
     def get_absolute_url(self):
-        return reverse('accounting:Commission_Structure_Detail', kwargs={'pk': self.id})
+        return reverse('customers:Staff_Detail', kwargs={'pk': self.staff.id})
 
     def get_update_url(self):
-        return reverse('accounting:Commission_Structure_Update', kwargs={'pk': self.id})
+        return reverse('accounting:CommissionStructure_Update', kwargs={'pk': self.id})
 
     def get_delete_url(self):
-        return reverse('accounting:Commission_Structure_Delete', kwargs={'pk': self.id})
+        return reverse('accounting:CommissionStructure_Delete', kwargs={'pk': self.id})
 
 
 class Payout(BaseEntity):
