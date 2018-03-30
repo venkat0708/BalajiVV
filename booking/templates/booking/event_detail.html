@@ -299,7 +299,7 @@ Events
                           Add Payin
                         </button>
                       </div>
-                      
+
                       </h4>
                     </div>
                     <div class="card-body">
@@ -361,11 +361,12 @@ Events
        <form action="{% url 'booking:Booked_Service_Add' %}" method="POST">
         {% csrf_token %}
         {% crispy booked_service_form %}
-        <input type="submit" value="Submit" class="btn btn-primary">
+        <div class="modal-footer">
+          <input type="submit" value="Submit" class="btn btn-primary">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        </div>
+
     </form>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
       </div>
     </div>
   </div>
@@ -389,12 +390,14 @@ Events
        <form action="{% url 'accounting:Payin_Add' %}" method="POST">
         {% csrf_token %}
         {% crispy Payin_form %}
-        <input type="submit" value="Submit" class="btn btn-primary">
+        <div class="modal-footer">
+          <input type="submit" value="Submit" class="btn btn-primary">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        </div>
+
     </form>
       </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-      </div>
+
     </div>
   </div>
 </div>
