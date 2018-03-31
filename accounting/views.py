@@ -291,7 +291,7 @@ def Payout_Add(request):
 			payout = form.save()
 			return HttpResponseRedirect(reverse('accounting:Payout_Index'))
 	else:
-		form = PayoutForm()
+		form = PayoutForm(initial = {'date':timezone.now().date(), 'time': timezone.now().time()})
 	return render(request, 'payouts/Payout_Add.html',{'form':form})
 
 @login_required

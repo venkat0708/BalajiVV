@@ -521,7 +521,7 @@ def update_bill_based_on_PayCommissionOrSalary_pre_save(sender, instance, **kwar
         pass
 
 @receiver(pre_delete, sender = PayCommissionOrSalary)
-def update_bill_based_on_payout_pre_save(sender, instance, **kwargs):
+def update_bill_based_on_PayCommissionOrSalary_pre_delete(sender, instance, **kwargs):
     print('triggered pre delete PayCommissionOrSalary' )
     payout = instance
     try:
@@ -582,6 +582,7 @@ def update_bill_based_on_payout_pre_save(sender, instance, **kwargs):
     try:
         past_payout = Payout.objects.get(pk = payout.id)
         amount = past_payout.amount
+        print(amount)
         bills = past_payout.bills.all()
         for bill in bills:
             if amount >0:
@@ -600,23 +601,27 @@ def update_bill_based_on_payout_pre_save(sender, instance, **kwargs):
 
 
 @receiver(pre_delete, sender = Payout)
-def update_bill_based_on_payout_pre_save(sender, instance, **kwargs):
+def update_bill_based_on_payout_pre_delete(sender, instance, **kwargs):
     print('triggered pre delete payout' )
     payout = instance
     try:
         delted_payout = Payout.objects.get(pk = payout.id)
         amount = delted_payout.amount
+        print(amount)
         bills = delted_payout.bills.all()
         for bill in bills:
             if amount >0:
-                if bill.paid < amount:
+                if bill.paid <= amount:
+                    print(bill.paid)
                     bill.paid = 0
                     bill.status = 'CONFIRMED'
+                    bill.paid_date = None
                     bill.save()
                     amount -= bill.paid
                 elif bill.paid > amount:
                     bill.paid -= amount
                     bill.status = 'PARTIAL_PAYMENT'
+                    bill.paid_date = None
                     bill.save()
                     amount -= bill.paid
     except:

@@ -22,9 +22,7 @@ class PayinForm(forms.ModelForm):
 			'date' : DateInput(),
 		}
 
-    def __init__(self, *args, **kwargs):
-        super(PayinForm, self).__init__(*args, **kwargs)
-        self.fields['event'].queryset = Event.objects.filter(~Q(invoice__status = 'PAID'))
+
 
 class PayCommissionOrSalaryForm(forms.ModelForm):
     """ form for PayCommissionOrSalary """
@@ -58,9 +56,7 @@ class CommissionForm(forms.ModelForm):
 		}
 
 
-	def __init__(self, *args, **kwargs):
-		super(CommissionForm, self).__init__(*args, **kwargs)
-		self.fields['event'].queryset = Event.objects.filter(status = 'COMPLETED')
+
 
 class InvoiceForm(forms.ModelForm):
 	""" form for Invoice"""
@@ -78,9 +74,7 @@ class InvoiceForm(forms.ModelForm):
 			'paid_date':DateInput(),
 		}
 
-	def __init__(self, *args, **kwargs):
-		super(InvoiceForm, self).__init__(*args, **kwargs)
-		self.fields['event'].queryset = Event.objects.filter(status = 'COMPLETED')
+
 
 
 class BillForm(forms.ModelForm):

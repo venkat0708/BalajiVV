@@ -355,7 +355,7 @@ def update_event_invoice_based_on_payin(sender,instance, created, **kwargs):
                     #print('paid')
                 else:
                     invoice.status = 'PARTIAL_PAYMENT'
-                    invoice.paid_date = null
+                    invoice.paid_date = None
                     invoice.save()
                     #print('post_save after save in partial payment in update :',invoice.paid)
                     #print('partial payment')
