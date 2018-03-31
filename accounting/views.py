@@ -7,6 +7,7 @@ from django.urls import reverse_lazy
 from django.db.models import F
 from django.views import generic
 from django.contrib.auth.mixins import UserPassesTestMixin,LoginRequiredMixin
+from django.utils import timezone
 
 from .models import Payin, Invoice, Commission, PayCommissionOrSalary, Bill,CommissionStructure, Payout
 from .forms import PayinForm, PayCommissionOrSalaryForm, CommissionForm, InvoiceForm, BillForm, PayoutForm
@@ -85,7 +86,7 @@ def PayCommissionOrSalary_Add(request):
 			form.save()
 			return HttpResponseRedirect(reverse('accounting:PayCommissionOrSalary_Index'))
 	else:
-		form = PayCommissionOrSalaryForm()
+		form = PayCommissionOrSalaryForm(initial = {'date':timezone.now().date(), 'time': timezone.now().time()})
 	return render(request, 'payouts_commission/Payout_Commission_Add.html',{'form':form})
 
 

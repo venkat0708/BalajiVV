@@ -113,7 +113,7 @@ module.exports = function (grunt) {
         cmd: 'python <%= paths.manageScript %> runserver'
       },
       runMailHog: {
-        cmd: './mailhog'
+        cmd: 'mailhog'
       },
     }
   });

@@ -50,7 +50,7 @@ class CommissionForm(forms.ModelForm):
 
 	class Meta:
 		model = Commission
-		exclude =['']
+		exclude =['payouts']
 		widgets = {
 			'generated_date':DateInput(),
 			'due_date':DateInput(),
@@ -71,7 +71,7 @@ class InvoiceForm(forms.ModelForm):
 
 	class Meta:
 		model = Invoice
-		exclude = ['']
+		exclude = ['payins']
 		widgets = {
 			'generated_date':DateInput(),
 			'due_date':DateInput(),
@@ -92,7 +92,7 @@ class BillForm(forms.ModelForm):
 
 	class Meta:
 		model = Bill
-		exclude = ['']
+		exclude = ['payouts']
 		widgets = {
 			'generated_date':DateInput(),
 			'due_date':DateInput(),

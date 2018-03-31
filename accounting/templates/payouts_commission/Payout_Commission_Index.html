@@ -30,6 +30,7 @@ Payouts Commissions
       <th>Amount</th>
       <th>Mode</th>
       <th></th>
+      <th></th>
 
     </tr>
   </thead>
@@ -42,10 +43,10 @@ Payouts Commissions
       <td>{{ p.time }}</td>
       <td>{{ p.amount }}</td>
       <td>{{ p.mode }}</td>
-      <!--
-      <td><a href="{{ e.get_update_url }}"><button type="button" class="btn btn-primary"><i class="fa fa-pencil-square-o fa-2x" aria-hidden="true"></i></button></a>&nbsp;&nbsp;
-      <a href="{{ e.get_delete_url }}"><button type="button" class="btn btn-danger"><i class="fa fa-trash fa-2x" aria-hidden="true"></i></button></a></td>
-    </tr> -->
+
+      <td><a href="{{ p.get_update_url }}"><button type="button" class="btn btn-primary">Edit</button></a></td>
+      <td><a href="{{ p.get_delete_url }}"><button type="button" class="btn btn-danger">Delete</button></a></td>
+    </tr>
     {% endfor %}
   </tbody>
 </table>
