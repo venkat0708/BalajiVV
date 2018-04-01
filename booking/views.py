@@ -10,7 +10,7 @@ from django.contrib.auth.decorators import login_required, user_passes_test
 from django.utils import timezone
 
 from .models import Event,Booked_Service
-from .forms import Booked_Service_Form
+from .forms import Booked_Service_Form, EventForm
 from accounting.forms import PayinForm
 
 
@@ -64,7 +64,7 @@ class EventDetailView(LoginRequiredMixin,UserPassesTestMixin,generic.DetailView)
 
 class EventCreateView(LoginRequiredMixin, UserPassesTestMixin,generic.edit.CreateView):
     model = Event
-    fields = ['customer','venue', 'city','start_date', 'start_time','end_date','end_time','advance','status']
+    form_class = EventForm
     template_name = 'booking/event_add.html'
     login_url = '/'
 
@@ -81,7 +81,7 @@ class EventCreateView(LoginRequiredMixin, UserPassesTestMixin,generic.edit.Creat
 
 class EventUpdateView(LoginRequiredMixin,UserPassesTestMixin,generic.edit.UpdateView):
     model = Event
-    fields = ['customer','venue', 'city','start_date', 'start_time','end_date','end_time','advance','status']
+    form_class = EventForm
     template_name = 'booking/event_update.html'
     login_url = '/'
 

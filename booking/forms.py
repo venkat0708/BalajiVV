@@ -11,7 +11,7 @@ class DateInput(forms.DateInput):
 
 
 class Booked_Service_Form(forms.ModelForm):
-	"""docstring for CustomerForm"""
+	"""form for Booked_Service"""
 
 	helper = FormHelper()
 	helper.form_tag = False
@@ -29,3 +29,19 @@ class Booked_Service_Form(forms.ModelForm):
 	def __init__(self, *args, **kwargs):
 		super(Booked_Service_Form, self).__init__(*args, **kwargs)
 		self.fields['event'].queryset = Event.objects.filter(~Q(status='COMPLETED'))
+
+
+class EventForm(forms.ModelForm):
+	"""form for Event"""
+
+	helper = FormHelper()
+	helper.form_tag = False
+	helper.form_style = 'inline'
+
+	class Meta:
+		model = Event
+		exclude = ['']
+		widgets = {
+			'start_date' : DateInput(),
+			'end_date' : DateInput(),
+		}

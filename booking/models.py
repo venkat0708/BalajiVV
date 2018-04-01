@@ -332,6 +332,7 @@ def update_event_invoice_based_on_payin(sender,instance, created, **kwargs):
 
                     else:
                         invoice.status = 'PARTIAL_PAYMENT'
+                        invoice.paid_date = None
                         invoice.event = event
                         invoice.save()
 

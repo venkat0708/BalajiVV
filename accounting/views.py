@@ -37,7 +37,7 @@ def Payin_Add(request):
 				event.save()
 			return HttpResponseRedirect(reverse('booking:Event_Detail', kwargs={'pk':payin.event.id}))
 	else:
-		form = PayinForm()
+		form = PayinForm(initial = {'date':timezone.now().date(), 'time': timezone.now().time()})
 	return render(request, 'payins/Payin_Add.html',{'form':form})
 
 @login_required

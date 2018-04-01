@@ -8,6 +8,10 @@ Categories
 
 {% endblock %}
 
+{% block additionalcss %}
+  <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.16/css/jquery.dataTables.css">
+{% endblock %}
+
 {% block content %}
 <div class="container">
 
@@ -18,16 +22,17 @@ Categories
       <br/>
       <a href="{% url 'products:Category_Create' %}"><button type="button" class="btn btn-primary"><i class="fa fa-plus-square fa-x" aria-hidden="true"></i> &nbsp;Add Category</button></a>
       <hr/>
-      
- {% if category_list %}    
- <table class="table table-striped">
+
+ {% if category_list %}
+ <table id="categoriesTable" class="table table-striped">
   <thead>
     <tr>
       <th>#</th>
       <th>Name</th>
       <th>Description</th>
       <th></th>
-      
+      <th></th>
+
     </tr>
   </thead>
   <tbody>
@@ -36,8 +41,8 @@ Categories
       <th scope="row">{{ forloop.counter }}</th>
       <td><a href="{{ c.get_absolute_url }}">{{ c.name }}</a></td>
       <td>{{ c.description }}</td>
-      <td><a href="{{ c.get_update_url }}"><button type="button" class="btn btn-primary"><i class="fa fa-pencil-square-o fa-2x" aria-hidden="true"></i></button></a>&nbsp;&nbsp;
-      <a href="{{ c.get_delete_url }}"><button type="button" class="btn btn-danger"><i class="fa fa-trash fa-2x" aria-hidden="true"></i></button></a></td>
+      <td><a href="{{ c.get_update_url }}"><button type="button" class="btn btn-primary">Edit</button></a></td>
+      <td><a href="{{ c.get_delete_url }}"><button type="button" class="btn btn-danger">Delete</i></button></a></td>
     </tr>
     {% endfor %}
   </tbody>
@@ -52,3 +57,14 @@ Categories
 
 </div>
 {% endblock content %}
+
+
+{% block additionaljs %}
+<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.js"></script>
+<script type="text/javascript">
+$(document).ready( function () {
+    $('#categoriesTable').DataTable();
+} );
+</script>
+
+{% endblock %}

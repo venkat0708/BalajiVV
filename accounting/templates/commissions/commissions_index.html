@@ -8,6 +8,10 @@ Commissions
 
 {% endblock %}
 
+{% block additionalcss %}
+  <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.16/css/jquery.dataTables.css">
+{% endblock %}
+
 {% block content %}
 <div class="container">
 
@@ -19,7 +23,7 @@ Commissions
       <a href="{% url 'accounting:Commission_Add' %}"><button type="button" class="btn btn-primary">Add Commission</button></a>
       <hr/>
 
- <table class="table table-striped">
+ <table id="commissionsTable" class="table table-striped">
   <thead>
     <tr>
       <th>#</th>
@@ -30,7 +34,7 @@ Commissions
       <th>Status</th>
       <th>Total Amount</th>
       <th>Paid Amount</th>
-      <th>Due Amount<th>
+      <th>Due Amount</th>
       <th></th>
       <th></th>
     </tr>
@@ -59,3 +63,14 @@ Commissions
 
 </div>
 {% endblock content %}
+
+
+{% block additionaljs %}
+<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.js"></script>
+<script type="text/javascript">
+$(document).ready( function () {
+    $('#commissionsTable').DataTable();
+} );
+</script>
+
+{% endblock %}
