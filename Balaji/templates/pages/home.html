@@ -1,1 +1,216 @@
 {% extends "base.html" %}
+
+{% load static  %}
+
+{% block title %}
+  Home
+{% endblock %}
+
+{% block content %}
+
+<header class="jumbotron my-4">
+        <h1 class="display-3">Welcome to Balaji Digitals</h1>
+        <p class="lead">We are known for the quality services that we have been offering to the industry from past 20 years. We are happy that you are interested in our services </p>
+        <a href="{% url 'account_signup' %}" class="btn btn-primary btn-lg">Try our service</a>
+</header>
+
+<div class="row">
+  <div class="col-sm-12">
+    <div class="card">
+    <div class="card-header bg-primary">
+        <h3 class="display-5 text-center">Our Services</h1>
+    </div>
+    <div class="card-body">
+
+
+      <div class="row text-center">
+
+        <div class="col-lg-3 col-md-6 mb-4">
+          <div class="card">
+            <img class="card-img-top" src="{% static 'images/led.jpg' %}" alt="">
+            <div class="card-body">
+              <h4 class="card-title">Mega size LED Display</h4>
+              <p class="card-text">You can order display of any size, We are here to configure all the configurable sizes possible. This suits for marriages, school and college anniversary celebrations.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-lg-3 col-md-6 mb-4">
+          <div class="card">
+            <img class="card-img-top img-responsive" src="{% static 'images/drone.jpg' %}" alt="">
+            <div class="card-body">
+              <h4 class="card-title">4K Drone Camera</h4>
+              <p class="card-text">How about a sky view of your function, won't it be amazing</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-lg-3 col-md-6 mb-4">
+          <div class="card">
+            <img class="card-img-top img-responsive" src="{% static 'images/tv.jpg' %}" alt="">
+            <div class="card-body">
+              <h4 class="card-title">Large size TV</h4>
+              <p class="card-text">we provide TV sets upto 50 inches for any kind of functions or events</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-lg-3 col-md-6 mb-4">
+          <div class="card">
+            <img class="card-img-top img-responsive" src="{% static 'images/pan160.jpg' %}" alt="">
+            <div class="card-body">
+              <h4 class="card-title">Panasonic 160 Camera</h4>
+              <p class="card-text">We capture your best moments with the best camera in the market</p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+      <!-- /.row -->
+
+    </div>
+</div>
+  </div>
+
+
+
+</div>
+
+
+
+{% endblock %}
+
+{% block footer %}
+<!--Footer-->
+<footer class="page-footer font-small unique-color-dark pt-0">
+
+    <div class="bg-primary">
+        <div class="container">
+            <!--Grid row-->
+            <div class="row py-4 d-flex align-items-center">
+
+                <!--Grid column-->
+                <div class="col-md-6 col-lg-5 text-center text-md-left mb-4 mb-md-0">
+                    <h6 class="mb-0 white-text">Get connected with us on social networks!</h6>
+                </div>
+                <!--Grid column-->
+
+                <!--Grid column-->
+                <div class="col-md-6 col-lg-7 text-center text-md-right">
+                    <!--Facebook-->
+                    <a class="fb-ic ml-0">
+                        <i class="fa fa-facebook white-text mr-lg-4"> </i>
+                    </a>
+                    <!--Twitter-->
+                    <a class="tw-ic">
+                        <i class="fa fa-twitter white-text mr-lg-4"> </i>
+                    </a>
+                    <!--Google +-->
+                    <a class="gplus-ic">
+                        <i class="fa fa-google-plus white-text mr-lg-4"> </i>
+                    </a>
+                    <!--Linkedin-->
+                    <a class="li-ic">
+                        <i class="fa fa-linkedin white-text mr-lg-4"> </i>
+                    </a>
+                    <!--Instagram-->
+                    <a class="ins-ic">
+                        <i class="fa fa-instagram white-text mr-lg-4"> </i>
+                    </a>
+                </div>
+                <!--Grid column-->
+
+            </div>
+            <!--Grid row-->
+        </div>
+    </div>
+
+    <!--Footer Links-->
+    <div class="container mt-5 mb-4 text-center text-md-left">
+        <div class="row mt-3">
+
+            <!--First column-->
+            <div class="col-md-3 col-lg-4 col-xl-3 mb-4">
+                <h6 class="text-uppercase font-weight-bold">
+                    <strong>Balaji Digitals</strong>
+                </h6>
+                <hr class="deep-purple accent-2 mb-4 mt-0 d-inline-block mx-auto" style="width: 60px;">
+                <p>Leader in the market when it comes to the services in the photography and videography services</p>
+            </div>
+            <!--/.First column-->
+
+            <!--Second column-->
+            <div class="col-md-2 col-lg-2 col-xl-2 mx-auto mb-4">
+                <h6 class="text-uppercase font-weight-bold">
+                    <strong>Services</strong>
+                </h6>
+                <hr class="deep-purple accent-2 mb-4 mt-0 d-inline-block mx-auto" style="width: 60px;">
+                <p>
+                    <a href="#!">LED display</a>
+                </p>
+                <p>
+                    <a href="#!">4K Drone Camera</a>
+                </p>
+                <p>
+                    <a href="#!">Large size TV sets</a>
+                </p>
+                <p>
+                    <a href="#!">Video Camera's</a>
+                </p>
+            </div>
+            <!--/.Second column-->
+
+            <!--Third column-->
+            <div class="col-md-3 col-lg-2 col-xl-2 mx-auto mb-4">
+                <h6 class="text-uppercase font-weight-bold">
+                    <strong>Services</strong>
+                </h6>
+                <hr class="deep-purple accent-2 mb-4 mt-0 d-inline-block mx-auto" style="width: 60px;">
+                <p>
+                    <a href="#!">Video Editing</a>
+                </p>
+                <p>
+                    <a href="#!">Video editing software seller</a>
+                </p>
+                <p>
+                    <a href="#!">Album Printing</a>
+                </p>
+                <p>
+                    <a href="#!">Many more </a>
+                </p>
+            </div>
+            <!--/.Third column-->
+
+            <!--Fourth column-->
+            <div class="col-md-4 col-lg-3 col-xl-3">
+                <h6 class="text-uppercase font-weight-bold">
+                    <strong>Contact</strong>
+                </h6>
+                <hr class="deep-purple accent-2 mb-4 mt-0 d-inline-block mx-auto" style="width: 60px;">
+                <p>
+                    <i class="fa fa-home mr-3"></i> Nandyal, Kurnool, 518501 , AP</p>
+                <p>
+                    <i class="fa fa-envelope mr-3"></i> balajidigitalsndl@gmail.com</p>
+                <p>
+                    <i class="fa fa-phone mr-3"></i> + 91 998 944 4933</p>
+                <p>
+                    <i class="fa fa-print mr-3"></i> + 91 905 917 1600</p>
+            </div>
+            <!--/.Fourth column-->
+
+        </div>
+    </div>
+    <!--/.Footer Links-->
+
+    <!-- Copyright-->
+    <div class="footer-copyright py-3 text-center">
+        © 2018 Copyright:
+        <a href="/">
+            <strong> BalajiDigitals.in</strong>
+        </a>
+    </div>
+    <!--/.Copyright -->
+
+</footer>
+<!--/.Footer-->
+{% endblock %}
